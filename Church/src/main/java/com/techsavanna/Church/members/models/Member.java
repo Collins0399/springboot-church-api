@@ -71,14 +71,14 @@ public class Member {
     private Department department;
 
     @Setter @Getter
-    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Contribution> contribution;
 
     @Setter @Getter
-    @OneToMany(mappedBy = "members")
+    @OneToMany(mappedBy = "member")
     private List<Attendance> attendance;
 
     @Setter @Getter
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "preacher")
     private List<Sermon> sermon;
 }

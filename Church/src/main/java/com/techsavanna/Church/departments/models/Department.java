@@ -23,14 +23,19 @@ public class Department {
     private String description;
     @Setter @Getter
     private LocalDate createdDate;
+
+    @ManyToOne
+    @JoinColumn(name = "leaderId")
     @Setter @Getter
-    private String leaderName;
+    private Member leader;
+
+
     @Setter @Getter
     @Enumerated(EnumType.STRING)
     private MeetingSchedule meetingSchedule;
 
     @Setter @Getter
-    @OneToMany (mappedBy = "departments", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "department", cascade = CascadeType.ALL)
     private List<Member> member;
 
 }

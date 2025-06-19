@@ -5,6 +5,8 @@ import com.techsavanna.Church.departments.dtos.DepartmentDto;
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.departments.repos.DepartmentRepository;
 import com.techsavanna.Church.departments.services.DepartmentService;
+import com.techsavanna.Church.members.models.Member;
+import com.techsavanna.Church.members.repos.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +19,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
+
     //Method to map DepartmentDto to Departments entity
     private DepartmentDto mapToDto(Department department) {
         DepartmentDto dto = new DepartmentDto();
         dto.setName(department.getName());
         dto.setDescription(department.getDescription());
         dto.setCreatedDate(department.getCreatedDate());
-        dto.setLeaderName(department.getLeaderName());
+        dto.setLeaderId(department.getLeader() != null ? department.getLeader().getMemberId() : null);
         dto.setMeetingSchedule(department.getMeetingSchedule());
         return dto;
     }
@@ -34,7 +40,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         department.setName(dto.getName());
         department.setDescription(dto.getDescription());
         department.setCreatedDate(dto.getCreatedDate());
-        department.setLeaderName(dto.getLeaderName());
+        if (dto.getLeaderId() != null) {
+            Member leader = memberRepository.findById(dto.getLeaderId())
+                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + dto.getLeaderId()));
+            department.setLeader(leader);
+        }
 
         department.setMeetingSchedule(dto.getMeetingSchedule());
         return department;
@@ -55,8 +65,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         existing.setName(departmentDto.getName());
         existing.setDescription(departmentDto.getDescription());
         existing.setCreatedDate(departmentDto.getCreatedDate());
-        existing.setLeaderName(departmentDto.getLeaderName());
         existing.setMeetingSchedule(departmentDto.getMeetingSchedule());
+        if (departmentDto.getLeaderId() != null) {
+            Member leader = memberRepository.findById(departmentDto.getLeaderId())
+                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + departmentDto.getLeaderId()));
+            existing.setLeader(leader);
+        }
 
         Department saved = departmentRepository.save(existing);
 

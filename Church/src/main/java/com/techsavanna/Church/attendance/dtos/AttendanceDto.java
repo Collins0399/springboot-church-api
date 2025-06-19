@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 @Data
 public class AttendanceDto {
     private Long attendanceId;
-
+    private Long memberId;
+    private Long eventId;
 
     private AttendanceStatus status;
 
