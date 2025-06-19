@@ -38,7 +38,6 @@ public class EventServiceImpl implements EventService {
     //Methods to map Event entity to EventDto
     private Event mapToEntity(EventDto eventDto){
         Event event = new Event ();
-        event.setEventId(eventDto.getEventId());
         event.setEventName(eventDto.getEventName());
         event.setEventType(eventDto.getEventType());
         event.setDescription(eventDto.getDescription());

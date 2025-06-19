@@ -8,28 +8,33 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Table (name = "contributions")
 public class Contribution {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Getter
     private Long contributionId;
 
+    @Setter @Getter
     @Enumerated(EnumType.STRING)
     private ContributionType contributionType;
+    @Setter @Getter
     private Double amount;
+    @Setter @Getter
     private LocalDate dateGiven;
+    @Setter @Getter
     private String paymentMethod;
 
+    @Setter @Getter
     private LocalDateTime createdAt;
+    @Setter @Getter
     private LocalDateTime updatedAt;
 
+    @Setter @Getter
     @ManyToOne
     @JoinColumn (name = "memberId", nullable = false)
-    private Member members;
+    private Member member;
 
 }

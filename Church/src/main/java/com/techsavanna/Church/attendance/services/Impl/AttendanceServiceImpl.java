@@ -20,7 +20,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     //  Mapping methods to convert attendance Dto to attendance entity
     AttendanceDto mapToDto (Attendance attendance) {
         AttendanceDto dto = new AttendanceDto() ;
-        dto.setAttendanceId(attendance.getAttendanceId());
         dto.setStatus(attendance.getStatus());
 
 
@@ -30,7 +29,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     // Mapping methods to convert attendance entity to attendance Dto
     Attendance mapToEntity (AttendanceDto attendanceDto){
         Attendance attendance = new Attendance();
-        attendance.setAttendanceId(attendanceDto.getAttendanceId());
         attendance.setStatus(attendanceDto.getStatus());
 
         return attendance;

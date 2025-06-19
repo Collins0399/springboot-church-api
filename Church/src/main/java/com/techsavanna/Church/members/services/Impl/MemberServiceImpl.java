@@ -19,7 +19,6 @@ public class MemberServiceImpl implements MemberService {
 // Method to map MemberDto to Members entity
 private MemberDto mapToDto(Member member) {
     MemberDto dto = new MemberDto();
-    dto.setMemberId(member.getMemberId());
     dto.setFirstName(member.getFirstName());
     dto.setLastName(member.getLastName());
     dto.setGender(member.getGender());
@@ -47,7 +46,6 @@ private MemberDto mapToDto(Member member) {
 // Method to map Members entity to MemberDto
     private Member mapToEntity(MemberDto dto) {
         Member member = new Member();
-        member.setMemberId(dto.getMemberId());
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
         member.setGender(dto.getGender());

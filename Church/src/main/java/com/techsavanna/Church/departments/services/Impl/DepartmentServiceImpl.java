@@ -20,7 +20,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     //Method to map DepartmentDto to Departments entity
     private DepartmentDto mapToDto(Department department) {
         DepartmentDto dto = new DepartmentDto();
-        dto.setDepartmentId(department.getDepartmentId());
         dto.setName(department.getName());
         dto.setDescription(department.getDescription());
         dto.setCreatedDate(department.getCreatedDate());
@@ -32,7 +31,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     //method to map Departments entity to DepartmentDto
     private Department mapToEntity(DepartmentDto dto) {
         Department department = new Department();
-        department.setDepartmentId(dto.getDepartmentId());
         department.setName(dto.getName());
         department.setDescription(dto.getDescription());
         department.setCreatedDate(dto.getCreatedDate());

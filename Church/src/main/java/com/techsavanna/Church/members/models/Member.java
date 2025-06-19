@@ -12,53 +12,73 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name= "members")
 public class Member {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Getter
     private Long memberId;
 
+    @Setter @Getter
     private String firstName;
+    @Setter @Getter
     private String lastName;
+    @Setter @Getter
     private String gender;
+    @Setter @Getter
     private LocalDate dateOfBirth;
+    @Setter @Getter
     private String maritalStatus;
 
+    @Setter @Getter
     private String email;
+    @Setter @Getter
     private String phoneNumber;
+    @Setter @Getter
     private String address;
+    @Setter @Getter
     private String country;
+    @Setter @Getter
     private String city;
+    @Setter @Getter
     private String postalCode;
 
+    @Setter @Getter
     private Boolean baptismStatus;
+    @Setter @Getter
     private LocalDate baptismDate;
 
+    @Setter @Getter
     private LocalDate joinedDate;
 
+    @Setter @Getter
     private String occupation;
+    @Setter @Getter
     private String roleInChurch;
+    @Setter @Getter
     private String profilePictureUrl;
 
+    @Setter @Getter
     @ManyToOne
     @JoinColumn(name = "familyId")
     private Family family;
 
+    @Setter @Getter
     @ManyToOne
     @JoinColumn (name = "departmentId")
-    private Department departments;
+    private Department department;
 
+    @Setter @Getter
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
-    private List<Contribution> contributions;
+    private List<Contribution> contribution;
 
+    @Setter @Getter
     @OneToMany(mappedBy = "members")
-    private List<Attendance> attendances;
+    private List<Attendance> attendance;
 
+    @Setter @Getter
     @OneToMany(mappedBy = "member")
-    private List<Sermon> sermons;
+    private List<Sermon> sermon;
 }

@@ -6,25 +6,25 @@ import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Table (name = "attendance")
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long attendanceId;
 
+    @Setter @Getter
     @Enumerated(EnumType.STRING)
     private AttendanceStatus status;
 
-
+    @Setter @Getter
     @ManyToOne
     @JoinColumn(name = "memberId")
-    private Member members;
+    private Member member;
 
+    @Setter @Getter
     @ManyToOne
     @JoinColumn (name = "eventId")
     private Event event;
