@@ -2,15 +2,14 @@ package com.techsavanna.Church.families.models;
 
 import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

@@ -2,13 +2,12 @@ package com.techsavanna.Church.sermons.models;
 
 import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

@@ -3,14 +3,13 @@ package com.techsavanna.Church.departments.models;
 import com.techsavanna.Church.enums.MeetingSchedule;
 import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

@@ -7,15 +7,14 @@ import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.families.models.Family;
 import com.techsavanna.Church.sermons.models.Sermon;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name= "members")
