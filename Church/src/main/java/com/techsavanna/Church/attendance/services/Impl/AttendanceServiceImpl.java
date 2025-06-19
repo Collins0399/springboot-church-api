@@ -21,7 +21,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     AttendanceDto mapToDto (Attendance attendance) {
         AttendanceDto dto = new AttendanceDto() ;
         dto.setAttendanceId(attendance.getAttendanceId());
-        dto.setAttended(attendance.getAttended());
+        dto.setStatus(attendance.getStatus());
         dto.setTimestamp(attendance.getTimestamp());
 
 
@@ -32,7 +32,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     Attendance mapToEntity (AttendanceDto attendanceDto){
         Attendance attendance = new Attendance();
         attendance.setAttendanceId(attendanceDto.getAttendanceId());
-        attendance.setAttended(attendanceDto.getAttended());
+        attendance.setStatus(attendanceDto.getStatus());
         attendance.setTimestamp(LocalDateTime.now());
 
         return attendance;
@@ -50,7 +50,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         Attendance existingAttendance = attendanceRepository.findById(attendanceId)
                 .orElseThrow(() -> new RuntimeException("Attendance not found with ID: "));
 
-        existingAttendance.setAttended(attendanceDto.getAttended());
+        existingAttendance.setStatus(attendanceDto.getStatus());
         existingAttendance.setTimestamp(attendanceDto.getTimestamp() != null
                 ? attendanceDto.getTimestamp()
                 : LocalDateTime.now());

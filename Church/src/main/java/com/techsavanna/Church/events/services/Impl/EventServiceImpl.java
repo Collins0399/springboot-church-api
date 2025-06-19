@@ -1,11 +1,9 @@
 package com.techsavanna.Church.events.services.Impl;
 
-import com.techsavanna.Church.attendance.models.Attendance;
 import com.techsavanna.Church.events.dtos.EventDto;
 import com.techsavanna.Church.events.models.Event;
 import com.techsavanna.Church.events.repos.EventRepository;
 import com.techsavanna.Church.events.services.EventService;
-import com.techsavanna.Church.members.models.Members;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

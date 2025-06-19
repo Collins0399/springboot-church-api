@@ -1,6 +1,6 @@
 package com.techsavanna.Church.announcements.models;
 
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table (name = "announcements")
-public class Announcements {
+public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long announcementId;
@@ -24,7 +24,4 @@ public class Announcements {
     private String targetAudience;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    @ManyToMany(mappedBy = "announcements")
-    private List<Members> members;
 }

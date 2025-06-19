@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class AnnouncementRepository {
+public class AnnouncementDto {
     private Long announcementId;
 
     private String title;

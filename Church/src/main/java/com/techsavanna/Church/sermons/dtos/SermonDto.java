@@ -10,7 +10,6 @@ public class SermonDto {
 
     private String title;
     private String theme;
-    private String bibleVerse;
-    private String description;
     private LocalDate sermonDate;
+    private String videoUrl;
 }

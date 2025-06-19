@@ -1,8 +1,7 @@
 package com.techsavanna.Church.members.services.Impl;
 
-import com.techsavanna.Church.departments.models.Departments;
 import com.techsavanna.Church.members.dtos.MemberDto;
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
 import com.techsavanna.Church.members.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class MemberServiceImpl implements MemberService {
     private MemberRepository memberRepository;
 
 // Method to map MemberDto to Members entity
-private MemberDto mapToDto(Members member) {
+private MemberDto mapToDto(Member member) {
     MemberDto dto = new MemberDto();
     dto.setMemberId(member.getMemberId());
     dto.setFirstName(member.getFirstName());
@@ -34,7 +33,6 @@ private MemberDto mapToDto(Members member) {
     dto.setPostalCode(member.getPostalCode());
     dto.setBaptismStatus(member.getBaptismStatus());
     dto.setBaptismDate(member.getBaptismDate());
-    dto.setMembershipStatus(member.getMembershipStatus());
     dto.setJoinedDate(member.getJoinedDate());
     dto.setOccupation(member.getOccupation());
     dto.setRoleInChurch(member.getRoleInChurch());
@@ -47,8 +45,8 @@ private MemberDto mapToDto(Members member) {
     return dto;
 }
 // Method to map Members entity to MemberDto
-    private Members mapToEntity(MemberDto dto) {
-        Members member = new Members();
+    private Member mapToEntity(MemberDto dto) {
+        Member member = new Member();
         member.setMemberId(dto.getMemberId());
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
@@ -63,7 +61,6 @@ private MemberDto mapToDto(Members member) {
         member.setPostalCode(dto.getPostalCode());
         member.setBaptismStatus(dto.getBaptismStatus());
         member.setBaptismDate(dto.getBaptismDate());
-        member.setMembershipStatus(dto.getMembershipStatus());
         member.setJoinedDate(dto.getJoinedDate());
         member.setOccupation(dto.getOccupation());
         member.setRoleInChurch(dto.getRoleInChurch());
@@ -80,13 +77,13 @@ private MemberDto mapToDto(Members member) {
 
     @Override
     public MemberDto createMember(MemberDto memberDto){
-        Members member = mapToEntity(memberDto);
-        Members savedMember = memberRepository.save(member);
+        Member member = mapToEntity(memberDto);
+        Member savedMember = memberRepository.save(member);
         return mapToDto(savedMember);
     }
     @Override
     public MemberDto updateMember(Long memberId, MemberDto memberDto) {
-        Members existing = memberRepository.findById(memberId)
+        Member existing = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         // Update only changed fields
@@ -103,13 +100,12 @@ private MemberDto mapToDto(Members member) {
         existing.setPostalCode(memberDto.getPostalCode());
         existing.setBaptismStatus(memberDto.getBaptismStatus());
         existing.setBaptismDate(memberDto.getBaptismDate());
-        existing.setMembershipStatus(memberDto.getMembershipStatus());
         existing.setJoinedDate(memberDto.getJoinedDate());
         existing.setOccupation(memberDto.getOccupation());
         existing.setRoleInChurch(memberDto.getRoleInChurch());
         existing.setProfilePictureUrl(memberDto.getProfilePictureUrl());
 
-        Members saved = memberRepository.save(existing);
+        Member saved = memberRepository.save(existing);
         return mapToDto(saved);
     }
 
@@ -119,7 +115,7 @@ private MemberDto mapToDto(Members member) {
     }
     @Override
     public MemberDto getMemberById(Long memberId) {
-    Optional<Members> member= memberRepository .findById( memberId);
+    Optional<Member> member= memberRepository .findById( memberId);
             return member.map(this::mapToDto).orElse(null);
     }
     @Override

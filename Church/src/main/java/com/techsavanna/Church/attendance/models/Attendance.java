@@ -1,7 +1,8 @@
 package com.techsavanna.Church.attendance.models;
 
+import com.techsavanna.Church.enums.AttendanceStatus;
 import com.techsavanna.Church.events.models.Event;
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,13 +20,14 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attendanceId;
 
+    @Enumerated(EnumType.STRING)
+    private AttendanceStatus status;
 
-    private Boolean attended;
     private LocalDateTime timestamp;
 
     @ManyToOne
     @JoinColumn(name = "memberId")
-    private Members members;
+    private Member members;
 
     @ManyToOne
     @JoinColumn (name = "eventId")

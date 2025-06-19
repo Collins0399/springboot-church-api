@@ -1,6 +1,6 @@
 package com.techsavanna.Church.sermons.models;
 
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,11 +20,10 @@ public class Sermon {
 
     private String title;
     private String theme;
-    private String bibleVerse;
-    private String description;
     private LocalDate sermonDate;
+    private String videoUrl;
 
     @ManyToOne
-    @JoinColumn(name = "memberId")//This is the id of the preacher from members table
-    private Members preacher;
+    @JoinColumn(name = "memberId")
+    private Member member;
 }

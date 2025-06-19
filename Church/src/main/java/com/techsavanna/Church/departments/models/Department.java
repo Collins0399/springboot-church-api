@@ -1,6 +1,7 @@
 package com.techsavanna.Church.departments.models;
 
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.enums.MeetingSchedule;
+import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table (name = "departments")
-public class Departments {
+public class Department {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long departmentId;
@@ -22,20 +23,10 @@ public class Departments {
     private String name;
     private String description;
     private LocalDate createdDate;
-
-    private String leaderName;
-    private String leaderPhone;
-    private String leaderEmail;
-
-    private Integer numberOfMembers;
-
-    private String meetingSchedule;
-    private String location;
-    private Boolean isActive;
-
-    private String notes;
+    @Enumerated(EnumType.STRING)
+    private MeetingSchedule meetingSchedule;
 
     @OneToMany (mappedBy = "departments", cascade = CascadeType.ALL)
-    private List<Members> members;
+    private List<Member> members;
 
 }

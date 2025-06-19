@@ -1,5 +1,6 @@
 package com.techsavanna.Church.departments.dtos;
 
+import com.techsavanna.Church.enums.MeetingSchedule;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -12,16 +13,6 @@ public class DepartmentDto {
     private String description;
     private LocalDate createdDate;
 
-    private String leaderName;
-    private String leaderPhone;
-    private String leaderEmail;
-
-    private Integer numberOfMembers;
-
-    private String meetingSchedule;
-    private String location;
-    private Boolean isActive;
-
-    private String notes;
+    private MeetingSchedule meetingSchedule;
 
 }

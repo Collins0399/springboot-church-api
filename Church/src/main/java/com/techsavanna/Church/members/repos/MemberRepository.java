@@ -1,10 +1,10 @@
 package com.techsavanna.Church.members.repos;
 
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.members.models.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Members, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
 }

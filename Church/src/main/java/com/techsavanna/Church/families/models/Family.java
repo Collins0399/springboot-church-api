@@ -1,6 +1,6 @@
 package com.techsavanna.Church.families.models;
 
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -16,13 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table (name = "families")
-public class Families {
+public class Family {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long familyId;
 
     private String familyName;
-    private Integer numberOfChildren;
 
     private String emergencyContactName;
     private String emergencyContactPhone;
@@ -32,9 +30,8 @@ public class Families {
     private String city;
     private String postalCode;
 
-    private String notes;
 
     @OneToMany (mappedBy = "family", cascade = CascadeType.ALL)
-    private List<Members> members;
+    private List<Member> members;
 
 }

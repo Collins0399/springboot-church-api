@@ -1,6 +1,7 @@
 package com.techsavanna.Church.contributions.models;
 
-import com.techsavanna.Church.members.models.Members;
+import com.techsavanna.Church.enums.ContributionType;
+import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,12 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table (name = "contributions")
-public class Contributions {
+public class Contribution {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long contributionId;
 
-    private String contributionType;
+    @Enumerated(EnumType.STRING)
+    private ContributionType contributionType;
     private Double amount;
     private LocalDate dateGiven;
     private String paymentMethod;
@@ -30,6 +32,6 @@ public class Contributions {
 
     @ManyToOne
     @JoinColumn (name = "memberId", nullable = false)
-    private Members members;
+    private Member members;
 
 }

@@ -1,5 +1,6 @@
 package com.techsavanna.Church.contributions.dtos;
 
+import com.techsavanna.Church.enums.ContributionType;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 public class ContributionDto {
     private Long contributionId;
 
-    private String contributionType;
+    private ContributionType contributionType;
     private Double amount;
     private LocalDate dateGiven;
     private String paymentMethod;

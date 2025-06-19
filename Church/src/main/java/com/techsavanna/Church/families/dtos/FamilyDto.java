@@ -7,7 +7,6 @@ public class FamilyDto {
     private Long familyId;
 
     private String familyName;
-    private Integer numberOfChildren;
 
     private String emergencyContactName;
     private String emergencyContactPhone;
@@ -17,5 +16,4 @@ public class FamilyDto {
     private String city;
     private String postalCode;
 
-    private String notes;
 }

@@ -1,5 +1,6 @@
 package com.techsavanna.Church.attendance.dtos;
 
+import com.techsavanna.Church.enums.AttendanceStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ public class AttendanceDto {
     private Long attendanceId;
 
 
-    private Boolean attended;
+    private AttendanceStatus status;
     private LocalDateTime timestamp;
 
 }

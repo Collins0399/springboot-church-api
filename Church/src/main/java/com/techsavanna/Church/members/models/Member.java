@@ -1,10 +1,10 @@
 package com.techsavanna.Church.members.models;
 
-import com.techsavanna.Church.announcements.models.Announcements;
+import com.techsavanna.Church.announcements.models.Announcement;
 import com.techsavanna.Church.attendance.models.Attendance;
-import com.techsavanna.Church.contributions.models.Contributions;
-import com.techsavanna.Church.departments.models.Departments;
-import com.techsavanna.Church.families.models.Families;
+import com.techsavanna.Church.contributions.models.Contribution;
+import com.techsavanna.Church.departments.models.Department;
+import com.techsavanna.Church.families.models.Family;
 import com.techsavanna.Church.sermons.models.Sermon;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name= "members")
-public class Members {
+public class Member {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -40,7 +40,6 @@ public class Members {
     private Boolean baptismStatus;
     private LocalDate baptismDate;
 
-    private String membershipStatus;
     private LocalDate joinedDate;
 
     private String occupation;
@@ -49,27 +48,18 @@ public class Members {
 
     @ManyToOne
     @JoinColumn(name = "familyId")
-    private Families family;
+    private Family family;
 
     @ManyToOne
     @JoinColumn (name = "departmentId")
-    private Departments departments;
+    private Department departments;
 
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
-    private List<Contributions> contributions;
+    private List<Contribution> contributions;
 
     @OneToMany(mappedBy = "members")
     private List<Attendance> attendances;
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_announcements",
-            joinColumns = @JoinColumn(name = "memberId"),
-            inverseJoinColumns = @JoinColumn(name = "announcementId")
-    )
-    private  List<Announcements> announcements;
-
-    @OneToMany(mappedBy = "preacher")
+    @OneToMany(mappedBy = "member")
     private List<Sermon> sermons;
-
 }

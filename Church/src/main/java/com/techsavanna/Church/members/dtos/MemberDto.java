@@ -24,13 +24,9 @@ public class MemberDto {
     private Boolean baptismStatus;
     private LocalDate baptismDate;
 
-    private String membershipStatus;
     private LocalDate joinedDate;
 
     private String occupation;
     private String roleInChurch;
     private String profilePictureUrl;
-
-    private Long departmentId;
-
 }
