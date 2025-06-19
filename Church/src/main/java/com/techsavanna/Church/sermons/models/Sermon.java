@@ -25,5 +25,5 @@ public class Sermon {
 
     @ManyToOne
     @JoinColumn(name = "memberId")
-    private Member member;
+    private Member preacher;
 }

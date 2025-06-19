@@ -23,6 +23,7 @@ public class Department {
     private String name;
     private String description;
     private LocalDate createdDate;
+    private String leaderName;
     @Enumerated(EnumType.STRING)
     private MeetingSchedule meetingSchedule;
 

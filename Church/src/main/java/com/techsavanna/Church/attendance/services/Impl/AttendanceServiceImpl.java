@@ -22,7 +22,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         AttendanceDto dto = new AttendanceDto() ;
         dto.setAttendanceId(attendance.getAttendanceId());
         dto.setStatus(attendance.getStatus());
-        dto.setTimestamp(attendance.getTimestamp());
 
 
         return dto;
@@ -33,7 +32,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         Attendance attendance = new Attendance();
         attendance.setAttendanceId(attendanceDto.getAttendanceId());
         attendance.setStatus(attendanceDto.getStatus());
-        attendance.setTimestamp(LocalDateTime.now());
 
         return attendance;
     }
@@ -51,9 +49,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .orElseThrow(() -> new RuntimeException("Attendance not found with ID: "));
 
         existingAttendance.setStatus(attendanceDto.getStatus());
-        existingAttendance.setTimestamp(attendanceDto.getTimestamp() != null
-                ? attendanceDto.getTimestamp()
-                : LocalDateTime.now());
 
         Attendance updated = attendanceRepository.save(existingAttendance);
         return mapToDto(updated);

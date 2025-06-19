@@ -11,6 +11,5 @@ public class AttendanceDto {
 
 
     private AttendanceStatus status;
-    private LocalDateTime timestamp;
 
 }

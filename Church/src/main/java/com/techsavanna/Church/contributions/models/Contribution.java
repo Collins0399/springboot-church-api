@@ -25,7 +25,6 @@ public class Contribution {
     private Double amount;
     private LocalDate dateGiven;
     private String paymentMethod;
-    private String referenceNote;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

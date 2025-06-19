@@ -23,7 +23,6 @@ public class Attendance {
     @Enumerated(EnumType.STRING)
     private AttendanceStatus status;
 
-    private LocalDateTime timestamp;
 
     @ManyToOne
     @JoinColumn(name = "memberId")

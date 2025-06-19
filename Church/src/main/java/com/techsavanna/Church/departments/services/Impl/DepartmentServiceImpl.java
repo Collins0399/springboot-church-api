@@ -24,6 +24,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         dto.setName(department.getName());
         dto.setDescription(department.getDescription());
         dto.setCreatedDate(department.getCreatedDate());
+        dto.setLeaderName(department.getLeaderName());
         dto.setMeetingSchedule(department.getMeetingSchedule());
         return dto;
     }
@@ -35,6 +36,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         department.setName(dto.getName());
         department.setDescription(dto.getDescription());
         department.setCreatedDate(dto.getCreatedDate());
+        department.setLeaderName(dto.getLeaderName());
+
         department.setMeetingSchedule(dto.getMeetingSchedule());
         return department;
     }
@@ -54,6 +57,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         existing.setName(departmentDto.getName());
         existing.setDescription(departmentDto.getDescription());
         existing.setCreatedDate(departmentDto.getCreatedDate());
+        existing.setLeaderName(departmentDto.getLeaderName());
         existing.setMeetingSchedule(departmentDto.getMeetingSchedule());
 
         Department saved = departmentRepository.save(existing);

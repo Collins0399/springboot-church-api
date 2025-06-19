@@ -32,6 +32,6 @@ public class Family {
 
 
     @OneToMany (mappedBy = "family", cascade = CascadeType.ALL)
-    private List<Member> members;
+    private List<Member> member;
 
 }

@@ -12,6 +12,7 @@ public class DepartmentDto {
     private String name;
     private String description;
     private LocalDate createdDate;
+    private String leaderName;
 
     private MeetingSchedule meetingSchedule;
 
