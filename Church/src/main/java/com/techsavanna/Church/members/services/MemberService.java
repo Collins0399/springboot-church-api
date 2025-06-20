@@ -1,13 +1,15 @@
-//package com.techsavanna.Church.members.services;
-//
-//import com.techsavanna.Church.members.dtos.MemberCreateDto;
-//
-//import java.util.List;
-//
-//public interface MemberService {
-//    MemberCreateDto createMember(MemberCreateDto memberDto);
-//    MemberCreateDto updateMember(Long memberId, MemberCreateDto memberDto);
-//    void deleteMember(Long memberId);
-//    MemberCreateDto getMemberById(Long memberId);
-//    List<MemberCreateDto> getAllMembers();
-//}
+package com.techsavanna.Church.members.services;
+
+import com.techsavanna.Church.members.dtos.MemberCreateDto;
+import com.techsavanna.Church.members.dtos.MemberResponseDto;
+import com.techsavanna.Church.members.dtos.MemberUpdateDto;
+
+import java.util.List;
+
+public interface MemberService {
+    MemberResponseDto createMember(MemberCreateDto dto);
+    MemberResponseDto updateMember(Long memberId, MemberUpdateDto dto);
+    List<MemberResponseDto> getAllMembers();
+    MemberResponseDto getMemberById(Long memberId);
+    void deleteMember(Long memberId);
+}

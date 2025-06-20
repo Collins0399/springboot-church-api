@@ -1,13 +1,13 @@
 package com.techsavanna.Church.departments.services;
 
-import com.techsavanna.Church.departments.dtos.DepartmentDto;
+import com.techsavanna.Church.departments.dtos.DepartmentCreateDto;
 
 import java.util.List;
 
 public interface DepartmentService {
-    DepartmentDto createDepartment(DepartmentDto departmentDto);
-    DepartmentDto updateDepartment(Long departmentId, DepartmentDto departmentDto);
+    DepartmentCreateDto createDepartment(DepartmentCreateDto departmentCreateDto);
+    DepartmentCreateDto updateDepartment(Long departmentId, DepartmentCreateDto departmentCreateDto);
     void deleteDepartment(Long departmentId);
-    DepartmentDto getDepartmentById(Long departmentId);
-    List <DepartmentDto> getAllDepartments();
+    DepartmentCreateDto getDepartmentById(Long departmentId);
+    List <DepartmentCreateDto> getAllDepartments();
 }

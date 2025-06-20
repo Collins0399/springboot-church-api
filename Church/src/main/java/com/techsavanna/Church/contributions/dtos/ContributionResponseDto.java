@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class ContributionDto {
+public class ContributionResponseDto {
     private Long contributionId;
 
     private ContributionType contributionType;
@@ -17,5 +17,4 @@ public class ContributionDto {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }

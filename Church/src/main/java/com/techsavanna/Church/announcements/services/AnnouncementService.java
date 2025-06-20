@@ -1,13 +1,13 @@
 package com.techsavanna.Church.announcements.services;
 
-import com.techsavanna.Church.announcements.dtos.AnnouncementDto;
+import com.techsavanna.Church.announcements.dtos.AnnouncementCreateDto;
 
 import java.util.List;
 
 public interface AnnouncementService {
-    AnnouncementDto createAnnouncement(AnnouncementDto announcementDto);
-    AnnouncementDto updateAnnouncement(Long announcementId, AnnouncementDto announcementDto);
+    AnnouncementCreateDto createAnnouncement(AnnouncementCreateDto announcementCreateDto);
+    AnnouncementCreateDto updateAnnouncement(Long announcementId, AnnouncementCreateDto announcementCreateDto);
     void deleteAnnouncement(Long announcementId);
-    AnnouncementDto getAnnouncementById(Long announcementId);
-    List <AnnouncementDto> getAllAnnouncements();
+    AnnouncementCreateDto getAnnouncementById(Long announcementId);
+    List <AnnouncementCreateDto> getAllAnnouncements();
 }

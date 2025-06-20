@@ -1,6 +1,6 @@
 package com.techsavanna.Church.departments.services.Impl;
 
-import com.techsavanna.Church.departments.dtos.DepartmentDto;
+import com.techsavanna.Church.departments.dtos.DepartmentCreateDto;
 
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.departments.repos.DepartmentRepository;
@@ -24,8 +24,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     //Method to map DepartmentDto to Departments entity
-    private DepartmentDto mapToDto(Department department) {
-        DepartmentDto dto = new DepartmentDto();
+    private DepartmentCreateDto mapToDto(Department department) {
+        DepartmentCreateDto dto = new DepartmentCreateDto();
         dto.setName(department.getName());
         dto.setDescription(department.getDescription());
         dto.setCreatedDate(department.getCreatedDate());
@@ -35,7 +35,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     //method to map Departments entity to DepartmentDto
-    private Department mapToEntity(DepartmentDto dto) {
+    private Department mapToEntity(DepartmentCreateDto dto) {
         Department department = new Department();
         department.setName(dto.getName());
         department.setDescription(dto.getDescription());
@@ -51,24 +51,24 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDto createDepartment(DepartmentDto departmentDto) {
-        Department department = mapToEntity( departmentDto);
+    public DepartmentCreateDto createDepartment(DepartmentCreateDto departmentCreateDto) {
+        Department department = mapToEntity(departmentCreateDto);
         Department savedDepartment = departmentRepository.save(department);
         return mapToDto(savedDepartment);
     }
 
     @Override
-    public DepartmentDto updateDepartment(Long departmentId, DepartmentDto departmentDto){
+    public DepartmentCreateDto updateDepartment(Long departmentId, DepartmentCreateDto departmentCreateDto){
         Department existing = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new RuntimeException("Department not found with id: "));
 
-        existing.setName(departmentDto.getName());
-        existing.setDescription(departmentDto.getDescription());
-        existing.setCreatedDate(departmentDto.getCreatedDate());
-        existing.setMeetingSchedule(departmentDto.getMeetingSchedule());
-        if (departmentDto.getLeaderId() != null) {
-            Member leader = memberRepository.findById(departmentDto.getLeaderId())
-                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + departmentDto.getLeaderId()));
+        existing.setName(departmentCreateDto.getName());
+        existing.setDescription(departmentCreateDto.getDescription());
+        existing.setCreatedDate(departmentCreateDto.getCreatedDate());
+        existing.setMeetingSchedule(departmentCreateDto.getMeetingSchedule());
+        if (departmentCreateDto.getLeaderId() != null) {
+            Member leader = memberRepository.findById(departmentCreateDto.getLeaderId())
+                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + departmentCreateDto.getLeaderId()));
             existing.setLeader(leader);
         }
 
@@ -83,13 +83,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDto getDepartmentById(Long departmentId) {
+    public DepartmentCreateDto getDepartmentById(Long departmentId) {
         Optional<Department> department= departmentRepository .findById( departmentId);
         return department.map(this::mapToDto).orElse(null);
     }
 
     @Override
-    public List<DepartmentDto> getAllDepartments() {
+    public List<DepartmentCreateDto> getAllDepartments() {
         List<Department> departments = departmentRepository.findAll();
         return departments.stream()
                 .map(this::mapToDto)

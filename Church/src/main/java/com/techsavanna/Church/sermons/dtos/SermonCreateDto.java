@@ -5,8 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class SermonDto {
-    private Long sermonId;
+public class SermonCreateDto {
 
     private String title;
     private String theme;

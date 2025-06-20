@@ -4,9 +4,8 @@ import com.techsavanna.Church.enums.MeetingSchedule;
 import lombok.Data;
 
 import java.time.LocalDate;
-
 @Data
-public class DepartmentDto {
+public class DepartmentResponseDto {
     private Long departmentId;
 
     private String name;
@@ -15,8 +14,5 @@ public class DepartmentDto {
     private Long leaderId;
     private String leaderName;
 
-
-
     private MeetingSchedule meetingSchedule;
-
 }

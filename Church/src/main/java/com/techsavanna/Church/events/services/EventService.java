@@ -1,14 +1,13 @@
-package com.techsavanna.Church.events.services;
-
-import com.techsavanna.Church.events.dtos.EventDto;
-import com.techsavanna.Church.events.models.Event;
-
-import java.util.List;
-
-public interface EventService {
-    EventDto createEvent(EventDto eventDto);
-    EventDto updateEvent(long eventId , EventDto eventDto);
-    void deleteEvent(Long eventId);
-    EventDto getEventById(Long eventId);
-    List<EventDto> getAllEvents();
-}
+//package com.techsavanna.Church.events.services;
+//
+//import com.techsavanna.Church.events.dtos.EventCreateDto;
+//
+//import java.util.List;
+//
+//public interface EventService {
+//    EventCreateDto createEvent(EventCreateDto eventCreateDto);
+//    EventCreateDto updateEvent(long eventId , EventCreateDto eventCreateDto);
+//    void deleteEvent(Long eventId);
+//    EventCreateDto getEventById(Long eventId);
+//    List<EventCreateDto> getAllEvents();
+//}

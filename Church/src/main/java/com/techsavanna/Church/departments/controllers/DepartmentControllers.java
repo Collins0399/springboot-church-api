@@ -1,6 +1,6 @@
 package com.techsavanna.Church.departments.controllers;
 
-import com.techsavanna.Church.departments.dtos.DepartmentDto;
+import com.techsavanna.Church.departments.dtos.DepartmentCreateDto;
 import com.techsavanna.Church.departments.services.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +15,14 @@ public class DepartmentControllers {
     private DepartmentService departmentService;
 
     @PostMapping
-    public ResponseEntity<DepartmentDto> createDepartment(@RequestBody DepartmentDto departmentDto) {
-        DepartmentDto createdDepartment = departmentService.createDepartment(departmentDto);
+    public ResponseEntity<DepartmentCreateDto> createDepartment(@RequestBody DepartmentCreateDto departmentCreateDto) {
+        DepartmentCreateDto createdDepartment = departmentService.createDepartment(departmentCreateDto);
         return ResponseEntity.ok(createdDepartment);
     }
 
     @PutMapping("/{departmentId}")
-    public ResponseEntity<DepartmentDto> updateDepartment(@PathVariable Long departmentId, @RequestBody DepartmentDto departmentDto) {
-        DepartmentDto updatedDepartment = departmentService.updateDepartment(departmentId, departmentDto);
+    public ResponseEntity<DepartmentCreateDto> updateDepartment(@PathVariable Long departmentId, @RequestBody DepartmentCreateDto departmentCreateDto) {
+        DepartmentCreateDto updatedDepartment = departmentService.updateDepartment(departmentId, departmentCreateDto);
         return ResponseEntity.ok(updatedDepartment);
     }
 
@@ -33,14 +33,14 @@ public class DepartmentControllers {
     }
 
     @GetMapping("/{departmentId}")
-    public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable Long departmentId) {
-        DepartmentDto department = departmentService.getDepartmentById(departmentId);
+    public ResponseEntity<DepartmentCreateDto> getDepartmentById(@PathVariable Long departmentId) {
+        DepartmentCreateDto department = departmentService.getDepartmentById(departmentId);
         return ResponseEntity.ok(department);
     }
 
     @GetMapping
-    public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
-        List<DepartmentDto> departments = departmentService.getAllDepartments();
+    public ResponseEntity<List<DepartmentCreateDto>> getAllDepartments() {
+        List<DepartmentCreateDto> departments = departmentService.getAllDepartments();
         return ResponseEntity.ok(departments);
     }
 

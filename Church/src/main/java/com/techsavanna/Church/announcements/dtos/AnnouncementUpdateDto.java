@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class AnnouncementDto {
+public class AnnouncementUpdateDto {
     private Long announcementId;
 
     private String title;
@@ -13,5 +13,4 @@ public class AnnouncementDto {
     private String targetAudience;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }
