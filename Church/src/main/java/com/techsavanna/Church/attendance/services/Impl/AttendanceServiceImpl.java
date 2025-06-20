@@ -1,73 +1,76 @@
 package com.techsavanna.Church.attendance.services.Impl;
 
 import com.techsavanna.Church.attendance.dtos.AttendanceCreateDto;
+import com.techsavanna.Church.attendance.dtos.AttendanceUpdateDto;
+import com.techsavanna.Church.attendance.dtos.AttendanceResponseDto;
 import com.techsavanna.Church.attendance.models.Attendance;
 import com.techsavanna.Church.attendance.repos.AttendanceRepository;
 import com.techsavanna.Church.attendance.services.AttendanceService;
+import com.techsavanna.Church.events.models.Event;
+import com.techsavanna.Church.events.repos.EventRepository;
+import com.techsavanna.Church.members.models.Member;
+import com.techsavanna.Church.members.repos.MemberRepository;
+import com.techsavanna.Church.mappers.AttendanceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
+
     @Autowired
     private AttendanceRepository attendanceRepository;
 
-    //  Mapping methods to convert attendance Dto to attendance entity
-    AttendanceCreateDto mapToDto (Attendance attendance) {
-        AttendanceCreateDto dto = new AttendanceCreateDto() ;
-        dto.setStatus(attendance.getStatus());
+    @Autowired
+    private MemberRepository memberRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
 
-        return dto;
-    }
+    @Override
+    public AttendanceResponseDto createAttendance(AttendanceCreateDto dto) {
+        Member member = memberRepository.findById(dto.getMemberId())
+                .orElseThrow(() -> new RuntimeException("Member not found"));
 
-    // Mapping methods to convert attendance entity to attendance Dto
-    Attendance mapToEntity (AttendanceCreateDto attendanceCreateDto){
-        Attendance attendance = new Attendance();
-        attendance.setStatus(attendanceCreateDto.getStatus());
+        Event event = eventRepository.findById(dto.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        return attendance;
+        Attendance attendance = AttendanceMapper.toEntity(member, event, dto);
+        Attendance saved = attendanceRepository.save(attendance);
+        return AttendanceMapper.toResponseDto(saved);
     }
 
     @Override
-    public AttendanceCreateDto createAttendance(AttendanceCreateDto attendanceCreateDto) {
-        Attendance attendance = mapToEntity(attendanceCreateDto);
-        Attendance savedAttendance = attendanceRepository.save(attendance);
-        return mapToDto(savedAttendance);
-    }
+    public AttendanceResponseDto updateAttendance(Long attendanceId, AttendanceUpdateDto dto) {
+        Attendance attendance = attendanceRepository.findById(attendanceId)
+                .orElseThrow(() -> new RuntimeException("Attendance not found"));
 
-    @Override
-    public AttendanceCreateDto updateAttendance(Long attendanceId, AttendanceCreateDto attendanceCreateDto) {
-        Attendance existingAttendance = attendanceRepository.findById(attendanceId)
-                .orElseThrow(() -> new RuntimeException("Attendance not found with ID: "));
-
-        existingAttendance.setStatus(attendanceCreateDto.getStatus());
-
-        Attendance updated = attendanceRepository.save(existingAttendance);
-        return mapToDto(updated);
+        Attendance updated = AttendanceMapper.toUpdatedEntity(attendance, dto);
+        return AttendanceMapper.toResponseDto(attendanceRepository.save(updated));
     }
 
     @Override
     public void deleteAttendance(Long attendanceId) {
+        if (!attendanceRepository.existsById(attendanceId)) {
+            throw new RuntimeException("Attendance not found");
+        }
         attendanceRepository.deleteById(attendanceId);
     }
 
     @Override
-    public AttendanceCreateDto getAttendanceById(Long attendanceId) {
-        Optional<Attendance> attendance = attendanceRepository.findById(attendanceId);
-        return attendance.map(this::mapToDto).orElse(null);
+    public AttendanceResponseDto getAttendanceById(Long attendanceId) {
+        Attendance attendance = attendanceRepository.findById(attendanceId)
+                .orElseThrow(() -> new RuntimeException("Attendance not found"));
+        return AttendanceMapper.toResponseDto(attendance);
     }
 
     @Override
-    public List<AttendanceCreateDto> getAllAttendance() {
+    public List<AttendanceResponseDto> getAllAttendances() {
         return attendanceRepository.findAll()
                 .stream()
-                .map( this::mapToDto)
+                .map(AttendanceMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
-
 }

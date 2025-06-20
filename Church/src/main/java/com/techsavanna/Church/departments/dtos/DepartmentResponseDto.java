@@ -7,12 +7,10 @@ import java.time.LocalDate;
 @Data
 public class DepartmentResponseDto {
     private Long departmentId;
-
     private String name;
     private String description;
     private LocalDate createdDate;
     private Long leaderId;
-    private String leaderName;
-
+    private String leaderFullName;
     private MeetingSchedule meetingSchedule;
 }

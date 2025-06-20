@@ -8,6 +8,5 @@ public class AttendanceResponseDto {
     private Long attendanceId;
     private Long memberId;
     private Long eventId;
-
     private AttendanceStatus status;
 }

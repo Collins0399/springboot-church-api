@@ -9,9 +9,7 @@ import java.time.LocalDate;
 public class DepartmentCreateDto {
     private String name;
     private String description;
-    private LocalDate createdDate;
     private Long leaderId;
-    private String leaderName;
-
     private MeetingSchedule meetingSchedule;
+    private LocalDate createdDate;
 }

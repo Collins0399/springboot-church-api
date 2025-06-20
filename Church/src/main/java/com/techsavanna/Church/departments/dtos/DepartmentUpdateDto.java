@@ -7,13 +7,9 @@ import java.time.LocalDate;
 
 @Data
 public class DepartmentUpdateDto {
-    private Long departmentId;
-
     private String name;
     private String description;
-    private LocalDate createdDate;
     private Long leaderId;
-    private String leaderName;
-
     private MeetingSchedule meetingSchedule;
+    private LocalDate createdDate;
 }

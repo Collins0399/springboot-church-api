@@ -1,99 +1,76 @@
 package com.techsavanna.Church.departments.services.Impl;
 
-import com.techsavanna.Church.departments.dtos.DepartmentCreateDto;
-
+import com.techsavanna.Church.departments.dtos.*;
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.departments.repos.DepartmentRepository;
 import com.techsavanna.Church.departments.services.DepartmentService;
+import com.techsavanna.Church.mappers.DepartmentMapper;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-    @Autowired
-    private DepartmentRepository departmentRepository;
+
+    private final DepartmentRepository departmentRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    private MemberRepository memberRepository;
-
-
-    //Method to map DepartmentDto to Departments entity
-    private DepartmentCreateDto mapToDto(Department department) {
-        DepartmentCreateDto dto = new DepartmentCreateDto();
-        dto.setName(department.getName());
-        dto.setDescription(department.getDescription());
-        dto.setCreatedDate(department.getCreatedDate());
-        dto.setLeaderId(department.getLeader() != null ? department.getLeader().getMemberId() : null);
-        dto.setMeetingSchedule(department.getMeetingSchedule());
-        return dto;
-    }
-
-    //method to map Departments entity to DepartmentDto
-    private Department mapToEntity(DepartmentCreateDto dto) {
-        Department department = new Department();
-        department.setName(dto.getName());
-        department.setDescription(dto.getDescription());
-        department.setCreatedDate(dto.getCreatedDate());
-        if (dto.getLeaderId() != null) {
-            Member leader = memberRepository.findById(dto.getLeaderId())
-                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + dto.getLeaderId()));
-            department.setLeader(leader);
-        }
-
-        department.setMeetingSchedule(dto.getMeetingSchedule());
-        return department;
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository, MemberRepository memberRepository) {
+        this.departmentRepository = departmentRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
-    public DepartmentCreateDto createDepartment(DepartmentCreateDto departmentCreateDto) {
-        Department department = mapToEntity(departmentCreateDto);
-        Department savedDepartment = departmentRepository.save(department);
-        return mapToDto(savedDepartment);
+    public DepartmentResponseDto createDepartment(DepartmentCreateDto dto) {
+        Member leader = memberRepository.findById(dto.getLeaderId())
+                .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + dto.getLeaderId()));
+
+        Department department = DepartmentMapper.toEntity(dto, leader);
+        Department saved = departmentRepository.save(department);
+        return DepartmentMapper.toResponseDto(saved);
     }
 
     @Override
-    public DepartmentCreateDto updateDepartment(Long departmentId, DepartmentCreateDto departmentCreateDto){
+    public DepartmentResponseDto updateDepartment(Long departmentId, DepartmentUpdateDto dto) {
         Department existing = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Department not found with id: "));
+                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + departmentId));
 
-        existing.setName(departmentCreateDto.getName());
-        existing.setDescription(departmentCreateDto.getDescription());
-        existing.setCreatedDate(departmentCreateDto.getCreatedDate());
-        existing.setMeetingSchedule(departmentCreateDto.getMeetingSchedule());
-        if (departmentCreateDto.getLeaderId() != null) {
-            Member leader = memberRepository.findById(departmentCreateDto.getLeaderId())
-                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + departmentCreateDto.getLeaderId()));
-            existing.setLeader(leader);
+        Member leader = null;
+        if (dto.getLeaderId() != null) {
+            leader = memberRepository.findById(dto.getLeaderId())
+                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + dto.getLeaderId()));
         }
 
-        Department saved = departmentRepository.save(existing);
-
-        return mapToDto(saved);
+        DepartmentMapper.updateEntity(existing, dto, leader);
+        Department updated = departmentRepository.save(existing);
+        return DepartmentMapper.toResponseDto(updated);
     }
 
     @Override
-    public void deleteDepartment(Long departmentId){
+    public void deleteDepartment(Long departmentId) {
+        if (!departmentRepository.existsById(departmentId)) {
+            throw new RuntimeException("Department not found with ID: " + departmentId);
+        }
         departmentRepository.deleteById(departmentId);
     }
 
     @Override
-    public DepartmentCreateDto getDepartmentById(Long departmentId) {
-        Optional<Department> department= departmentRepository .findById( departmentId);
-        return department.map(this::mapToDto).orElse(null);
+    public DepartmentResponseDto getDepartmentById(Long departmentId) {
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + departmentId));
+        return DepartmentMapper.toResponseDto(department);
     }
 
     @Override
-    public List<DepartmentCreateDto> getAllDepartments() {
+    public List<DepartmentResponseDto> getAllDepartments() {
         List<Department> departments = departmentRepository.findAll();
         return departments.stream()
-                .map(this::mapToDto)
+                .map(DepartmentMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
-
 }

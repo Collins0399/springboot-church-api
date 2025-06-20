@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class EventUpdateDto {
-    private Long eventId;
-
     private String eventName;
     private String eventType;
     private String description;

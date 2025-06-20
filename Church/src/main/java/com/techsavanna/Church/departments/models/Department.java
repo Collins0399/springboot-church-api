@@ -25,7 +25,7 @@ public class Department {
     private LocalDate createdDate;
 
     @ManyToOne
-    @JoinColumn(name = "leaderId")
+    @JoinColumn(name = "leader_id")
     @Setter @Getter
     private Member leader;
 
@@ -36,6 +36,5 @@ public class Department {
 
     @Setter @Getter
     @OneToMany (mappedBy = "department", cascade = CascadeType.ALL)
-    private List<Member> member;
-
+    private List<Member> members;
 }

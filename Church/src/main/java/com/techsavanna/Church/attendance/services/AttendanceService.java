@@ -1,13 +1,15 @@
 package com.techsavanna.Church.attendance.services;
 
 import com.techsavanna.Church.attendance.dtos.AttendanceCreateDto;
+import com.techsavanna.Church.attendance.dtos.AttendanceUpdateDto;
+import com.techsavanna.Church.attendance.dtos.AttendanceResponseDto;
 
 import java.util.List;
 
 public interface AttendanceService {
-    AttendanceCreateDto createAttendance(AttendanceCreateDto attendanceCreateDto);
-    AttendanceCreateDto updateAttendance(Long attendanceId, AttendanceCreateDto attendanceCreateDto);
+    AttendanceResponseDto createAttendance(AttendanceCreateDto dto);
+    AttendanceResponseDto updateAttendance(Long attendanceId, AttendanceUpdateDto dto);
+    AttendanceResponseDto getAttendanceById(Long attendanceId);
+    List<AttendanceResponseDto> getAllAttendances();
     void deleteAttendance(Long attendanceId);
-    AttendanceCreateDto getAttendanceById(Long attendanceId);
-    List<AttendanceCreateDto> getAllAttendance();
 }
