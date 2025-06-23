@@ -36,6 +36,6 @@ public class Family {
 
     @Setter @Getter
     @OneToMany (mappedBy = "family", cascade = CascadeType.ALL)
-    private List<Member> member;
+    private List<Member> members;
 
 }

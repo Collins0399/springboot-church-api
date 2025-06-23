@@ -4,13 +4,9 @@ import lombok.Data;
 
 @Data
 public class FamilyUpdateDto {
-    private Long familyId;
-
     private String familyName;
-
     private String emergencyContactName;
     private String emergencyContactPhone;
-
     private String address;
     private String country;
     private String city;

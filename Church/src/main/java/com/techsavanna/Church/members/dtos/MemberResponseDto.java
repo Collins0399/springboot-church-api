@@ -7,7 +7,8 @@ import java.time.LocalDate;
 @Data
 public class MemberResponseDto {
     private Long memberId;
-
+    private Long familyId;
+    private Long departmentId;
     private String firstName;
     private String lastName;
     private String gender;

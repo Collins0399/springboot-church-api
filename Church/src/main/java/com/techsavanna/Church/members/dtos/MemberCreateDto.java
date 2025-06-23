@@ -6,7 +6,8 @@ import java.time.LocalDate;
 
 @Data
 public class MemberCreateDto {
-
+    private Long departmentId;
+    private Long familyId;
     private String firstName;
     private String lastName;
     private String gender;

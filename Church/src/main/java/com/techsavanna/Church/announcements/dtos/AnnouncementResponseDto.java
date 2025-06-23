@@ -5,9 +5,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class AttendanceResponseDto {
+public class AnnouncementResponseDto {
     private Long announcementId;
-
     private String title;
     private String message;
     private String targetAudience;

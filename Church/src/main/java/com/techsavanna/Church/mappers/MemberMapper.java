@@ -1,14 +1,19 @@
 package com.techsavanna.Church.mappers;
 
+import com.techsavanna.Church.departments.models.Department;
+import com.techsavanna.Church.families.models.Family;
 import com.techsavanna.Church.members.dtos.MemberCreateDto;
-import com.techsavanna.Church.members.dtos.MemberUpdateDto;
 import com.techsavanna.Church.members.dtos.MemberResponseDto;
+import com.techsavanna.Church.members.dtos.MemberUpdateDto;
 import com.techsavanna.Church.members.models.Member;
 
 public class MemberMapper {
 
-    public static Member toEntity(MemberCreateDto dto) {
+    public static Member toEntity(MemberCreateDto dto, Family family, Department department) {
         Member member = new Member();
+        member.setFamily(family);
+        member.setDepartment(department);
+
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
         member.setGender(dto.getGender());
@@ -26,10 +31,14 @@ public class MemberMapper {
         member.setOccupation(dto.getOccupation());
         member.setRoleInChurch(dto.getRoleInChurch());
         member.setProfilePictureUrl(dto.getProfilePictureUrl());
+
         return member;
     }
 
-    public static Member toUpdatedEntity(Member member, MemberUpdateDto dto) {
+    public static Member toUpdatedEntity(Member member, MemberUpdateDto dto, Family family, Department department) {
+        member.setFamily(family);
+        member.setDepartment(department);
+
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
         member.setGender(dto.getGender());
@@ -47,6 +56,7 @@ public class MemberMapper {
         member.setOccupation(dto.getOccupation());
         member.setRoleInChurch(dto.getRoleInChurch());
         member.setProfilePictureUrl(dto.getProfilePictureUrl());
+
         return member;
     }
 
@@ -70,6 +80,14 @@ public class MemberMapper {
         dto.setOccupation(member.getOccupation());
         dto.setRoleInChurch(member.getRoleInChurch());
         dto.setProfilePictureUrl(member.getProfilePictureUrl());
+
+        if (member.getFamily() != null) {
+            dto.setFamilyId(member.getFamily().getFamilyId());
+        }
+        if (member.getDepartment() != null) {
+            dto.setDepartmentId(member.getDepartment().getDepartmentId());
+        }
+
         return dto;
     }
 }

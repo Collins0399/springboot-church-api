@@ -1,5 +1,9 @@
 package com.techsavanna.Church.members.services.Impl;
 
+import com.techsavanna.Church.departments.models.Department;
+import com.techsavanna.Church.departments.repos.DepartmentRepository;
+import com.techsavanna.Church.families.models.Family;
+import com.techsavanna.Church.families.repos.FamilyRepository;
 import com.techsavanna.Church.mappers.MemberMapper;
 import com.techsavanna.Church.members.dtos.MemberCreateDto;
 import com.techsavanna.Church.members.dtos.MemberResponseDto;
@@ -19,9 +23,21 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private FamilyRepository familyRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
     @Override
     public MemberResponseDto createMember(MemberCreateDto dto) {
-        Member member = MemberMapper.toEntity(dto);
+        Family family = familyRepository.findById(dto.getFamilyId())
+                .orElseThrow(() -> new RuntimeException("Family not found with ID: " + dto.getFamilyId()));
+
+        Department department = departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + dto.getDepartmentId()));
+
+        Member member = MemberMapper.toEntity(dto, family, department);
         Member savedMember = memberRepository.save(member);
         return MemberMapper.toResponseDto(savedMember);
     }
@@ -29,8 +45,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseDto updateMember(Long memberId, MemberUpdateDto dto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
-        Member updated = MemberMapper.toUpdatedEntity(member, dto);
+                .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
+
+        Family family = familyRepository.findById(dto.getFamilyId())
+                .orElseThrow(() -> new RuntimeException("Family not found with ID: " + dto.getFamilyId()));
+
+        Department department = departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + dto.getDepartmentId()));
+
+        Member updated = MemberMapper.toUpdatedEntity(member, dto, family, department);
         return MemberMapper.toResponseDto(memberRepository.save(updated));
     }
 

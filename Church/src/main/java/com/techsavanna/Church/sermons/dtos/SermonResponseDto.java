@@ -7,9 +7,11 @@ import java.time.LocalDate;
 @Data
 public class SermonResponseDto {
     private Long sermonId;
-
     private String title;
     private String theme;
     private LocalDate sermonDate;
     private String videoUrl;
+    private Long preacherId;
+    private String preacherName;
+
 }

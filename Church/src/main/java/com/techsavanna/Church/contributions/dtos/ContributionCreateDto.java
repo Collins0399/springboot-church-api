@@ -12,7 +12,5 @@ public class ContributionCreateDto {
     private Double amount;
     private LocalDate dateGiven;
     private String paymentMethod;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Long memberId;
 }
