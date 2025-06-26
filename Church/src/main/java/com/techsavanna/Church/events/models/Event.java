@@ -1,6 +1,7 @@
 package com.techsavanna.Church.events.models;
 
 import com.techsavanna.Church.attendance.models.Attendance;
+import com.techsavanna.Church.enums.EventStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,7 +35,8 @@ public class Event {
     private String host;
 
     @Setter @Getter
-    private String status;
+    @Enumerated(EnumType .STRING)
+    private EventStatus status;
 
     @Setter @Getter
     private LocalDateTime createdAt;

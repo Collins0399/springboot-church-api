@@ -2,6 +2,7 @@ package com.techsavanna.Church.mappers;
 
 import com.techsavanna.Church.contributions.dtos.*;
 import com.techsavanna.Church.contributions.models.Contribution;
+import com.techsavanna.Church.enums.PaymentMethod;
 import com.techsavanna.Church.members.models.Member;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public class ContributionMapper {
         contribution.setContributionType(dto.getContributionType());
         contribution.setAmount(dto.getAmount());
         contribution.setDateGiven(dto.getDateGiven());
-        contribution.setPaymentMethod(dto.getPaymentMethod());
+        contribution.setPaymentMethod(PaymentMethod.valueOf(dto.getPaymentMethod().toUpperCase()));
         contribution.setCreatedAt(LocalDateTime.now());
         contribution.setUpdatedAt(LocalDateTime.now());
         contribution.setMember(member);
@@ -26,7 +27,7 @@ public class ContributionMapper {
         contribution.setContributionType(dto.getContributionType());
         contribution.setAmount(dto.getAmount());
         contribution.setDateGiven(dto.getDateGiven());
-        contribution.setPaymentMethod(dto.getPaymentMethod());
+        contribution.setPaymentMethod(PaymentMethod.valueOf(dto.getPaymentMethod().toUpperCase()));
         contribution.setUpdatedAt(LocalDateTime.now());
     }
 
@@ -37,7 +38,7 @@ public class ContributionMapper {
         dto.setContributionType(contribution.getContributionType());
         dto.setAmount(contribution.getAmount());
         dto.setDateGiven(contribution.getDateGiven());
-        dto.setPaymentMethod(contribution.getPaymentMethod());
+        dto.setPaymentMethod(contribution.getPaymentMethod().name());
         dto.setCreatedAt(contribution.getCreatedAt());
         dto.setUpdatedAt(contribution.getUpdatedAt());
         dto.setMemberId(contribution.getMember().getMemberId());

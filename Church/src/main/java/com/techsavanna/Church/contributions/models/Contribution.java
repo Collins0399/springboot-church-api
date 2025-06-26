@@ -1,6 +1,7 @@
 package com.techsavanna.Church.contributions.models;
 
 import com.techsavanna.Church.enums.ContributionType;
+import com.techsavanna.Church.enums.PaymentMethod;
 import com.techsavanna.Church.members.models.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +26,8 @@ public class Contribution {
     @Setter @Getter
     private LocalDate dateGiven;
     @Setter @Getter
-    private String paymentMethod;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
 
     @Setter @Getter
     private LocalDateTime createdAt;

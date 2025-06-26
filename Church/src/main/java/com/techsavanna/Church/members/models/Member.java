@@ -33,6 +33,7 @@ public class Member {
     private String maritalStatus;
 
     @Setter @Getter
+    @Column(name = "email" , unique = true , nullable = false)
     private String email;
     @Setter @Getter
     private String phoneNumber;
