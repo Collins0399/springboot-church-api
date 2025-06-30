@@ -1,4 +1,4 @@
-package com.techsavanna.Church.mappers;
+package com.techsavanna.Church.attendance.mappers;
 
 import com.techsavanna.Church.attendance.dtos.AttendanceCreateDto;
 import com.techsavanna.Church.attendance.dtos.AttendanceUpdateDto;
@@ -31,3 +31,4 @@ public class AttendanceMapper {
         return dto;
     }
 }
+

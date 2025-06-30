@@ -1,4 +1,4 @@
-package com.techsavanna.Church.mappers;
+package com.techsavanna.Church.departments.mappers;
 
 import com.techsavanna.Church.departments.dtos.*;
 import com.techsavanna.Church.departments.models.Department;
@@ -63,3 +63,4 @@ public class DepartmentMapper {
         return dto;
     }
 }
+

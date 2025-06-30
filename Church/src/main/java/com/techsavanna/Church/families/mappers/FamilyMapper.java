@@ -1,4 +1,4 @@
-package com.techsavanna.Church.mappers;
+package com.techsavanna.Church.families.mappers;
 
 import com.techsavanna.Church.families.dtos.FamilyCreateDto;
 import com.techsavanna.Church.families.dtos.FamilyResponseDto;
@@ -48,7 +48,7 @@ public class FamilyMapper {
 
         if (family.getMembers() != null && !family.getMembers().isEmpty()) {
             List<MemberSummaryDto> members = family.getMembers().stream()
-                    .map(FamilyMapper::toMemberSummary)
+                    .map(com.techsavanna.Church.families.mappers.FamilyMapper::toMemberSummary)
                     .collect(Collectors.toList());
             dto.setMembers(members);
         }
@@ -64,3 +64,4 @@ public class FamilyMapper {
         return dto;
     }
 }
+

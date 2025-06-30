@@ -50,4 +50,5 @@ public class DepartmentController {
         List<DepartmentResponseDto> departments = departmentService.getAllDepartments();
         return ResponseEntity.ok(departments);
     }
+
 }

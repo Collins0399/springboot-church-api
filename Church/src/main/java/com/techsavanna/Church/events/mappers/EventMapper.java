@@ -1,10 +1,11 @@
-package com.techsavanna.Church.mappers;
+package com.techsavanna.Church.events.mappers;
 
 import com.techsavanna.Church.enums.EventStatus;
 import com.techsavanna.Church.events.dtos.EventCreateDto;
 import com.techsavanna.Church.events.dtos.EventUpdateDto;
 import com.techsavanna.Church.events.dtos.EventResponseDto;
 import com.techsavanna.Church.events.models.Event;
+import com.techsavanna.Church.utils.EventStatusUtil;
 
 import java.time.LocalDateTime;
 
@@ -19,9 +20,15 @@ public class EventMapper {
         event.setEndDateTime(dto.getEndDateTime());
         event.setLocation(dto.getLocation());
         event.setHost(dto.getHost());
-        event.setStatus(EventStatus.valueOf(dto.getStatus().toUpperCase()));
+
+        event.setStatus(EventStatusUtil.determineStatus(
+                dto.getStartDateTime(),
+                dto.getEndDateTime()
+        ));
+
         event.setCreatedAt(LocalDateTime.now());
         event.setUpdatedAt(LocalDateTime.now());
+
         return event;
     }
 
@@ -33,7 +40,12 @@ public class EventMapper {
         event.setEndDateTime(dto.getEndDateTime());
         event.setLocation(dto.getLocation());
         event.setHost(dto.getHost());
-        event.setStatus(EventStatus.valueOf(dto.getStatus().toUpperCase()));
+
+        event.setStatus(EventStatusUtil.determineStatus(
+                dto.getStartDateTime(),
+                dto.getEndDateTime()
+        ));
+
         event.setUpdatedAt(LocalDateTime.now());
         return event;
     }
@@ -54,3 +66,4 @@ public class EventMapper {
         return dto;
     }
 }
+

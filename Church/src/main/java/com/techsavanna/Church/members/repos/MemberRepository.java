@@ -12,18 +12,22 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-        Optional<Member> findByEmail(String email);
+        @Query("SELECT m FROM Member m WHERE m.email = :email")
+        Optional<Member> findByEmail(@Param("email") String email);
 
-        List<Member> findByFirstNameContainingIgnoreCase(String namePart);
+        @Query("SELECT m FROM Member m WHERE LOWER(m.firstName) LIKE LOWER(CONCAT('%', :namePart, '%'))")
+        List<Member> findByFirstNameContainingIgnoreCase(@Param("namePart") String namePart);
 
-        List<Member> findByMaritalStatus(String maritalStatus);
+        @Query("SELECT m FROM Member m WHERE m.maritalStatus = :maritalStatus")
+        List<Member> findByMaritalStatus(@Param("maritalStatus") String maritalStatus);
 
-        List<Member> findByDepartment(Department department);
+        @Query("SELECT m FROM Member m WHERE LOWER(m.department.name) = LOWER(:departmentName)")
+        List<Member> findByDepartmentIgnoreCase(@Param("departmentName") String departmentName);
 
-        List<Member> findByFamily_FamilyName(String familyName);
+        @Query("SELECT m FROM Member m WHERE LOWER(m.family.familyName) = LOWER(:familyName)")
+        List<Member> findByFamily_FamilyNameIgnoreCase(@Param("familyName") String familyName);
 
-        List<Member> findByBaptismStatusTrue();
-        List<Member> findByBaptismStatusFalse();
-
+        @Query("SELECT m FROM Member m WHERE m.baptismStatus = :status")
+        List<Member> findByBaptismStatus(@Param("status") boolean status);
     }
 

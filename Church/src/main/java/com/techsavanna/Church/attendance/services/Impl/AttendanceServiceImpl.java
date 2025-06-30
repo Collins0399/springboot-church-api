@@ -3,6 +3,7 @@ package com.techsavanna.Church.attendance.services.Impl;
 import com.techsavanna.Church.attendance.dtos.AttendanceCreateDto;
 import com.techsavanna.Church.attendance.dtos.AttendanceUpdateDto;
 import com.techsavanna.Church.attendance.dtos.AttendanceResponseDto;
+import com.techsavanna.Church.attendance.mappers.AttendanceMapper;
 import com.techsavanna.Church.attendance.models.Attendance;
 import com.techsavanna.Church.attendance.repos.AttendanceRepository;
 import com.techsavanna.Church.attendance.services.AttendanceService;
@@ -10,7 +11,7 @@ import com.techsavanna.Church.events.models.Event;
 import com.techsavanna.Church.events.repos.EventRepository;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
-import com.techsavanna.Church.mappers.AttendanceMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -15,9 +15,4 @@ public class EventUpdateDto {
 
     private String location;
     private String host;
-
-    private String status;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

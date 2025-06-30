@@ -1,4 +1,4 @@
-package com.techsavanna.Church.mappers;
+package com.techsavanna.Church.members.mappers;
 
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.families.models.Family;
@@ -91,3 +91,4 @@ public class MemberMapper {
         return dto;
     }
 }
+

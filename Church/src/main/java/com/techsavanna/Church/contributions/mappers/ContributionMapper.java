@@ -1,4 +1,4 @@
-package com.techsavanna.Church.mappers;
+package com.techsavanna.Church.contributions.mappers;
 
 import com.techsavanna.Church.contributions.dtos.*;
 import com.techsavanna.Church.contributions.models.Contribution;
@@ -45,4 +45,5 @@ public class ContributionMapper {
         return dto;
     }
 }
+
 

@@ -1,10 +1,10 @@
 package com.techsavanna.Church.departments.services.Impl;
 
 import com.techsavanna.Church.departments.dtos.*;
+import com.techsavanna.Church.departments.mappers.DepartmentMapper;
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.departments.repos.DepartmentRepository;
 import com.techsavanna.Church.departments.services.DepartmentService;
-import com.techsavanna.Church.mappers.DepartmentMapper;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,4 +73,5 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .map(DepartmentMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+
 }

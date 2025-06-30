@@ -1,10 +1,13 @@
 package com.techsavanna.Church.announcements.services.Impl;
 
 import com.techsavanna.Church.announcements.dtos.*;
+import com.techsavanna.Church.announcements.mappers.AnnouncementMapper;
 import com.techsavanna.Church.announcements.models.Announcement;
 import com.techsavanna.Church.announcements.repos.AnnouncementRepository;
 import com.techsavanna.Church.announcements.services.AnnouncementService;
-import com.techsavanna.Church.mappers.AnnouncementMapper;
+
+import com.techsavanna.Church.enums.AnnouncementStatus;
+import com.techsavanna.Church.announcements.dtos.AnnouncementResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,4 +60,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 .map(AnnouncementMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<AnnouncementResponseDto> findByStatusIgnoreCase(String status) {
+        List<Announcement> announcements = repository.findByStatusIgnoreCase(status);
+        return announcements.stream()
+                .map(AnnouncementMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
 }

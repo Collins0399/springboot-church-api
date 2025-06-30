@@ -1,12 +1,14 @@
 package com.techsavanna.Church.events.services.Impl;
 
+import com.techsavanna.Church.enums.EventStatus;
 import com.techsavanna.Church.events.dtos.EventCreateDto;
 import com.techsavanna.Church.events.dtos.EventUpdateDto;
 import com.techsavanna.Church.events.dtos.EventResponseDto;
+import com.techsavanna.Church.events.mappers.EventMapper;
 import com.techsavanna.Church.events.models.Event;
 import com.techsavanna.Church.events.repos.EventRepository;
 import com.techsavanna.Church.events.services.EventService;
-import com.techsavanna.Church.mappers.EventMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,4 +59,18 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+    @Override
+    @Transactional
+    public void deleteCompletedEvents(){
+        eventRepository.deleteCompletedEvents();
+    }
+
+    @Override
+    public List<EventResponseDto> getEventsByStatus(EventStatus status){
+        List<Event> events = eventRepository.findByStatus(status);
+        return events.stream()
+                .map(EventMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.techsavanna.Church.mappers;
+package com.techsavanna.Church.sermons.mappers;
 
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.sermons.dtos.SermonCreateDto;
@@ -43,3 +43,4 @@ public class SermonMapper {
     }
 
 }
+

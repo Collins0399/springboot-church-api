@@ -1,5 +1,6 @@
 package com.techsavanna.Church.events.dtos;
 
+import com.techsavanna.Church.enums.EventStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,9 +17,4 @@ public class EventCreateDto {
 
     private String location;
     private String host;
-
-    private String status;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }
