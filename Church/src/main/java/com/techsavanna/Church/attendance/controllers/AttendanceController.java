@@ -4,7 +4,9 @@ import com.techsavanna.Church.attendance.dtos.AttendanceCreateDto;
 import com.techsavanna.Church.attendance.dtos.AttendanceUpdateDto;
 import com.techsavanna.Church.attendance.dtos.AttendanceResponseDto;
 import com.techsavanna.Church.attendance.services.AttendanceService;
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,32 +20,37 @@ public class AttendanceController {
     private AttendanceService attendanceService;
 
     @PostMapping
-    public ResponseEntity<AttendanceResponseDto> createAttendance(@RequestBody AttendanceCreateDto dto) {
+    public ResponseEntity<ApiResponse<AttendanceResponseDto>> createAttendance(@RequestBody AttendanceCreateDto dto) {
         AttendanceResponseDto created = attendanceService.createAttendance(dto);
-        return ResponseEntity.ok(created);
+        ApiResponse<AttendanceResponseDto> response = new ApiResponse<>("success", "Attendance created successfully", created);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AttendanceResponseDto> updateAttendance(@PathVariable Long id, @RequestBody AttendanceUpdateDto dto) {
+    public ResponseEntity<ApiResponse<AttendanceResponseDto>> updateAttendance(@PathVariable Long id, @RequestBody AttendanceUpdateDto dto) {
         AttendanceResponseDto updated = attendanceService.updateAttendance(id, dto);
-        return ResponseEntity.ok(updated);
+        ApiResponse<AttendanceResponseDto> response = new ApiResponse<>("success", "Attendance updated successfully", updated);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AttendanceResponseDto> getAttendanceById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<AttendanceResponseDto>> getAttendanceById(@PathVariable Long id) {
         AttendanceResponseDto attendance = attendanceService.getAttendanceById(id);
-        return ResponseEntity.ok(attendance);
+        ApiResponse<AttendanceResponseDto> response = new ApiResponse<>("success", "Attendance fetched successfully", attendance);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<AttendanceResponseDto>> getAllAttendances() {
+    public ResponseEntity<ApiResponse<List<AttendanceResponseDto>>> getAllAttendances() {
         List<AttendanceResponseDto> all = attendanceService.getAllAttendances();
-        return ResponseEntity.ok(all);
+        ApiResponse<List<AttendanceResponseDto>> response = new ApiResponse<>("success", "All attendance records retrieved successfully", all);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAttendance(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteAttendance(@PathVariable Long id) {
         attendanceService.deleteAttendance(id);
-        return ResponseEntity.noContent().build();
+        ApiResponse<String> response = new ApiResponse<>("success", "Attendance record deleted successfully", "Attendance record deleted successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

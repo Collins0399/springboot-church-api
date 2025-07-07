@@ -6,7 +6,9 @@ import com.techsavanna.Church.members.dtos.MemberResponseDto;
 import com.techsavanna.Church.members.mappers.MemberMapper;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.services.MemberService;
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,69 +23,87 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<MemberResponseDto> createMember(@RequestBody MemberCreateDto memberDto) {
-        MemberResponseDto createdMember = memberService.createMember(memberDto);
-        return ResponseEntity.ok(createdMember);
+    public ResponseEntity<ApiResponse<MemberResponseDto>> createMember(@RequestBody MemberCreateDto memberDto) {
+        MemberResponseDto result = memberService.createMember(memberDto);
+        ApiResponse<MemberResponseDto> response = new ApiResponse<>(
+                "success", "Member Created successfully", result
+        );
+        return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
 
     @PutMapping("/{memberId}")
-    public ResponseEntity<MemberResponseDto> updateMember(@PathVariable Long memberId, @RequestBody MemberUpdateDto memberDto) {
-        MemberResponseDto updatedMember = memberService.updateMember(memberId, memberDto);
-        return ResponseEntity.ok(updatedMember);
+    public ResponseEntity<ApiResponse<MemberResponseDto>> updateMember(@PathVariable Long memberId, @RequestBody MemberUpdateDto memberDto) {
+        MemberResponseDto result = memberService.updateMember(memberId, memberDto);
+        ApiResponse<MemberResponseDto> response = new ApiResponse<>(
+                "success", "Member Updated successfully", result
+        );
+        return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
+    public ResponseEntity<ApiResponse<Void>> deleteMember(@PathVariable Long memberId) {
         memberService.deleteMember(memberId);
-        return ResponseEntity.noContent().build();
+        ApiResponse<Void> response = new ApiResponse<>(
+                "success", "Member Deleted successfully", null
+        );
+        return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<MemberResponseDto> getByMemberId(@PathVariable Long memberId) {
+    public ResponseEntity<ApiResponse<MemberResponseDto>> getByMemberId(@PathVariable Long memberId) {
         MemberResponseDto memberDto = memberService.getMemberById(memberId);
-        return ResponseEntity.ok(memberDto);
+        ApiResponse<MemberResponseDto> response = new ApiResponse<>("success", "Member fetched successfully", memberDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<MemberResponseDto>> getAllMembers() {
+    public ResponseEntity<ApiResponse<List<MemberResponseDto>>> getAllMembers() {
         List<MemberResponseDto> members = memberService.getAllMembers();
-        return ResponseEntity.ok(members);
+        ApiResponse<List<MemberResponseDto>> response = new ApiResponse<>("success", "All members retrieved successfully", members);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/by-email")
-    public ResponseEntity<MemberResponseDto> getMemberByEmail(@RequestParam String email) {
+    public ResponseEntity<ApiResponse<MemberResponseDto>> getMemberByEmail(@RequestParam String email) {
         return memberService.getMemberByEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(member -> new ResponseEntity<>(
+                        new ApiResponse<>("success", "Member found", member), HttpStatus.OK))
+                .orElse(new ResponseEntity<>(
+                        new ApiResponse<>("error", "Member not found", null), HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/search-by-name")
-    public ResponseEntity<List<MemberResponseDto>> searchByFirstName(@RequestParam String namePart) {
+    public ResponseEntity<ApiResponse<List<MemberResponseDto>>> searchByFirstName(@RequestParam String namePart) {
         List<MemberResponseDto> members = memberService.searchByFirstName(namePart);
-        return ResponseEntity.ok(members);
+        ApiResponse<List<MemberResponseDto>> response = new ApiResponse<>("success", "Members matching name found", members);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/by-marital-status")
-    public ResponseEntity<List<MemberResponseDto>> getByMaritalStatus(@RequestParam String maritalStatus) {
+    public ResponseEntity<ApiResponse<List<MemberResponseDto>>> getByMaritalStatus(@RequestParam String maritalStatus) {
         List<MemberResponseDto> members = memberService.getMembersByMaritalStatus(maritalStatus);
-        return ResponseEntity.ok(members);
+        ApiResponse<List<MemberResponseDto>> response = new ApiResponse<>("success", "Members by marital status retrieved", members);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/by-department")
-    public ResponseEntity<List<MemberResponseDto>> getByDepartment(@RequestParam String departmentName) {
+    public ResponseEntity<ApiResponse<List<MemberResponseDto>>> getByDepartment(@RequestParam String departmentName) {
         List<MemberResponseDto> members = memberService.getMembersByDepartment(departmentName);
-        return ResponseEntity.ok(members);
+        ApiResponse<List<MemberResponseDto>> response = new ApiResponse<>("success", "Members by department retrieved", members);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/by-family-name")
-    public ResponseEntity<List<MemberResponseDto>> getByFamilyName(@RequestParam String familyName) {
+    public ResponseEntity<ApiResponse<List<MemberResponseDto>>> getByFamilyName(@RequestParam String familyName) {
         List<MemberResponseDto> members = memberService.getMembersByFamilyName(familyName);
-        return ResponseEntity.ok(members);
+        ApiResponse<List<MemberResponseDto>> response = new ApiResponse<>("success", "Members by family retrieved", members);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/by-baptism-status")
-    public ResponseEntity<List<MemberResponseDto>> getByBaptismStatus(@RequestParam boolean status) {
+    public ResponseEntity<ApiResponse<List<MemberResponseDto>>> getByBaptismStatus(@RequestParam boolean status) {
         List<MemberResponseDto> members = memberService.getMembersByBaptismStatus(status);
-        return ResponseEntity.ok(members);
+        ApiResponse<List<MemberResponseDto>> response = new ApiResponse<>("success", "Members by baptism status retrieved", members);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

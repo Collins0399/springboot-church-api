@@ -4,7 +4,9 @@ import com.techsavanna.Church.families.dtos.FamilyCreateDto;
 import com.techsavanna.Church.families.dtos.FamilyResponseDto;
 import com.techsavanna.Church.families.dtos.FamilyUpdateDto;
 import com.techsavanna.Church.families.services.FamilyService;
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,32 +19,37 @@ public class FamilyController {
     private FamilyService familyService;
 
     @PostMapping
-    public ResponseEntity<FamilyResponseDto> createFamily(@RequestBody FamilyCreateDto familyDto) {
+    public ResponseEntity<ApiResponse<FamilyResponseDto>> createFamily(@RequestBody FamilyCreateDto familyDto) {
         FamilyResponseDto createdFamily = familyService.createFamily(familyDto);
-        return ResponseEntity.ok(createdFamily);
+        ApiResponse<FamilyResponseDto> response = new ApiResponse<>("success", "Family created successfully", createdFamily);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{familyId}")
-    public ResponseEntity<FamilyResponseDto> updateFamily(@PathVariable Long familyId, @RequestBody FamilyUpdateDto familyDto) {
+    public ResponseEntity<ApiResponse<FamilyResponseDto>> updateFamily(@PathVariable Long familyId, @RequestBody FamilyUpdateDto familyDto) {
         FamilyResponseDto updatedFamily = familyService.updateFamily(familyId, familyDto);
-        return ResponseEntity.ok(updatedFamily);
+        ApiResponse<FamilyResponseDto> response = new ApiResponse<>("success", "Family updated successfully", updatedFamily);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{familyId}")
-    public ResponseEntity<Void> deleteFamily(@PathVariable Long familyId) {
+    public ResponseEntity<ApiResponse<Void>> deleteFamily(@PathVariable Long familyId) {
         familyService.deleteFamily(familyId);
-        return ResponseEntity.noContent().build();
+        ApiResponse<Void> response = new ApiResponse<>("success", "Family deleted successfully", null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{familyId}")
-    public ResponseEntity<FamilyResponseDto> getByFamilyId(@PathVariable Long familyId) {
+    public ResponseEntity<ApiResponse<FamilyResponseDto>> getByFamilyId(@PathVariable Long familyId) {
         FamilyResponseDto familyDto = familyService.getFamilyById(familyId);
-        return ResponseEntity.ok(familyDto);
+        ApiResponse<FamilyResponseDto> response = new ApiResponse<>("success", "Family fetched successfully", familyDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<FamilyResponseDto>> getAllFamilies() {
+    public ResponseEntity<ApiResponse<List<FamilyResponseDto>>> getAllFamilies() {
         List<FamilyResponseDto> families = familyService.getAllFamilies();
-        return ResponseEntity.ok(families);
+        ApiResponse<List<FamilyResponseDto>> response = new ApiResponse<>("success", "All families retrieved successfully", families);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

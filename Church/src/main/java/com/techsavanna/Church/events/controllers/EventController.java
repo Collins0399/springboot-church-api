@@ -6,7 +6,9 @@ import com.techsavanna.Church.events.dtos.EventUpdateDto;
 import com.techsavanna.Church.events.dtos.EventResponseDto;
 import com.techsavanna.Church.events.services.EventService;
 
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,52 +22,54 @@ public class EventController {
     private EventService eventService;
 
     @PostMapping
-    public ResponseEntity<EventResponseDto> createEvent(@RequestBody EventCreateDto eventDto) {
+    public ResponseEntity<ApiResponse<EventResponseDto>> createEvent(@RequestBody EventCreateDto eventDto) {
         EventResponseDto createdEvent = eventService.createEvent(eventDto);
-        return ResponseEntity.ok(createdEvent);
+        ApiResponse<EventResponseDto> response = new ApiResponse<>("success", "Event created successfully", createdEvent);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<EventResponseDto> updateEvent(@PathVariable Long eventId, @RequestBody EventUpdateDto eventDto) {
+    public ResponseEntity<ApiResponse<EventResponseDto>> updateEvent(@PathVariable Long eventId, @RequestBody EventUpdateDto eventDto) {
         EventResponseDto updatedEvent = eventService.updateEvent(eventId, eventDto);
-        return ResponseEntity.ok(updatedEvent);
+        ApiResponse<EventResponseDto> response = new ApiResponse<>("success", "Event updated successfully", updatedEvent);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
+    public ResponseEntity<ApiResponse<Void>> deleteEvent(@PathVariable Long eventId) {
         eventService.deleteEvent(eventId);
-        return ResponseEntity.noContent().build();
+        ApiResponse<Void> response = new ApiResponse<>("success", "Event deleted successfully", null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<EventResponseDto> getEventById(@PathVariable Long eventId) {
+    public ResponseEntity<ApiResponse<EventResponseDto>> getEventById(@PathVariable Long eventId) {
         EventResponseDto event = eventService.getEventById(eventId);
-        return ResponseEntity.ok(event);
+        ApiResponse<EventResponseDto> response = new ApiResponse<>("success", "Event fetched successfully", event);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<EventResponseDto>> getAllEvents() {
+    public ResponseEntity<ApiResponse<List<EventResponseDto>>> getAllEvents() {
         List<EventResponseDto> events = eventService.getAllEvents();
-        return ResponseEntity.ok(events);
+        ApiResponse<List<EventResponseDto>> response = new ApiResponse<>("success", "All events retrieved successfully", events);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @DeleteMapping("/delete/completed")
-    public ResponseEntity<String> deleteCompletedEvents() {
-        eventService.deleteCompletedEvents();
-        return ResponseEntity.ok("All completed events deleted successfully.");
-    }
-//    @GetMapping("/status/{status}")
-//    public ResponseEntity<List<EventResponseDto>> getEventsByStatus(@PathVariable("status") EventStatus status) {
-//        EventStatus eventStatus = EventStatus.valueOf(status.toUpperCase());
-//        List<EventResponseDto> events = eventService.getEventsByStatus(status);
-//        return ResponseEntity.ok(events);
-//    }
-@GetMapping("/status/{status}")
-public ResponseEntity<List<EventResponseDto>> getEventsByStatus(@PathVariable String status) {
-    EventStatus eventStatus = EventStatus.valueOf(status.toUpperCase());
-    List<EventResponseDto> events = eventService.getEventsByStatus(eventStatus);
-    return ResponseEntity.ok(events);
-}
 
+    @DeleteMapping("/delete/completed")
+    public ResponseEntity<ApiResponse<String>> deleteCompletedEvents() {
+        eventService.deleteCompletedEvents();
+        ApiResponse<String> response = new ApiResponse<>("success", "All completed events deleted successfully.", "All completed events deleted successfully.");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<ApiResponse<List<EventResponseDto>>> getEventsByStatus(@PathVariable String status) {
+        EventStatus eventStatus = EventStatus.valueOf(status.toUpperCase());
+        List<EventResponseDto> events = eventService.getEventsByStatus(eventStatus);
+        ApiResponse<List<EventResponseDto>> response = new ApiResponse<>("success", "Events by status fetched successfully", events);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }
 
