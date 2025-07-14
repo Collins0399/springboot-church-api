@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/families")
+@CrossOrigin(origins = "http://localhost:5173")
 public class FamilyController {
     @Autowired
     private FamilyService familyService;
