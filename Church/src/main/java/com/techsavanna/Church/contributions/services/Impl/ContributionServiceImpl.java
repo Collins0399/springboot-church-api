@@ -7,6 +7,7 @@ import com.techsavanna.Church.contributions.mappers.ContributionMapper;
 import com.techsavanna.Church.contributions.models.Contribution;
 import com.techsavanna.Church.contributions.repos.ContributionRepository;
 import com.techsavanna.Church.contributions.services.ContributionService;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ContributionServiceImpl implements ContributionService {
     @Override
     public ContributionResponseDto createContribution(ContributionCreateDto dto) {
         Member member = memberRepository.findById(dto.getMemberId())
-                .orElseThrow(() -> new RuntimeException("Member not found with ID: " + dto.getMemberId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found with ID: " + dto.getMemberId()));
         Contribution contribution = ContributionMapper.toEntity(dto, member);
         Contribution saved = contributionRepository.save(contribution);
         return ContributionMapper.toResponseDto(saved);
@@ -36,7 +37,7 @@ public class ContributionServiceImpl implements ContributionService {
     @Override
     public ContributionResponseDto updateContribution(Long contributionId, ContributionUpdateDto dto) {
         Contribution contribution = contributionRepository.findById(contributionId)
-                .orElseThrow(() -> new RuntimeException("Contribution not found with ID: " + contributionId));
+                .orElseThrow(() -> new ResourceNotFoundException("Contribution not found with ID: " + contributionId));
         ContributionMapper.updateEntity(contribution, dto);
         Contribution updated = contributionRepository.save(contribution);
         return ContributionMapper.toResponseDto(updated);
@@ -44,13 +45,16 @@ public class ContributionServiceImpl implements ContributionService {
 
     @Override
     public void deleteContribution(Long contributionId) {
+        if (!contributionRepository.existsById(contributionId)) {
+            throw new ResourceNotFoundException("Contribution not found with ID: " + contributionId);
+        }
         contributionRepository.deleteById(contributionId);
     }
 
     @Override
     public ContributionResponseDto getContributionById(Long contributionId) {
         Contribution contribution = contributionRepository.findById(contributionId)
-                .orElseThrow(() -> new RuntimeException("Contribution not found with ID: " + contributionId));
+                .orElseThrow(() -> new ResourceNotFoundException("Contribution not found with ID: " + contributionId));
         return ContributionMapper.toResponseDto(contribution);
     }
 
@@ -62,5 +66,3 @@ public class ContributionServiceImpl implements ContributionService {
                 .collect(Collectors.toList());
     }
 }
-
-

@@ -1,6 +1,7 @@
 package com.techsavanna.Church.events.services.Impl;
 
 import com.techsavanna.Church.enums.EventStatus;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.events.dtos.EventCreateDto;
 import com.techsavanna.Church.events.dtos.EventUpdateDto;
 import com.techsavanna.Church.events.dtos.EventResponseDto;
@@ -31,7 +32,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventResponseDto updateEvent(Long eventId, EventUpdateDto dto) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + eventId));
 
         Event updatedEvent = EventMapper.toUpdatedEntity(event, dto);
         return EventMapper.toResponseDto(eventRepository.save(updatedEvent));
@@ -40,7 +41,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public void deleteEvent(Long eventId) {
         if (!eventRepository.existsById(eventId)) {
-            throw new RuntimeException("Event not found");
+            throw new ResourceNotFoundException("Event not found with ID: " + eventId);
         }
         eventRepository.deleteById(eventId);
     }
@@ -48,7 +49,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventResponseDto getEventById(Long eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + eventId));
         return EventMapper.toResponseDto(event);
     }
 
@@ -59,18 +60,18 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+
     @Override
     @Transactional
-    public void deleteCompletedEvents(){
+    public void deleteCompletedEvents() {
         eventRepository.deleteCompletedEvents();
     }
 
     @Override
-    public List<EventResponseDto> getEventsByStatus(EventStatus status){
+    public List<EventResponseDto> getEventsByStatus(EventStatus status) {
         List<Event> events = eventRepository.findByStatus(status);
         return events.stream()
                 .map(EventMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
-
 }

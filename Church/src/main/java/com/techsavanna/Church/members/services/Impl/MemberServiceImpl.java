@@ -2,6 +2,7 @@ package com.techsavanna.Church.members.services.Impl;
 
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.departments.repos.DepartmentRepository;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.families.models.Family;
 import com.techsavanna.Church.families.repos.FamilyRepository;
 import com.techsavanna.Church.members.dtos.MemberCreateDto;
@@ -33,10 +34,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseDto createMember(MemberCreateDto dto) {
         Family family = familyRepository.findById(dto.getFamilyId())
-                .orElseThrow(() -> new RuntimeException("Family not found with ID: " + dto.getFamilyId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Family not found with ID: " + dto.getFamilyId()));
 
         Department department = departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + dto.getDepartmentId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + dto.getDepartmentId()));
 
         Member member = MemberMapper.toEntity(dto, family, department);
         Member savedMember = memberRepository.save(member);
@@ -46,13 +47,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseDto updateMember(Long memberId, MemberUpdateDto dto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found with ID: " + memberId));
 
         Family family = familyRepository.findById(dto.getFamilyId())
-                .orElseThrow(() -> new RuntimeException("Family not found with ID: " + dto.getFamilyId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Family not found with ID: " + dto.getFamilyId()));
 
         Department department = departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + dto.getDepartmentId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + dto.getDepartmentId()));
 
         Member updated = MemberMapper.toUpdatedEntity(member, dto, family, department);
         return MemberMapper.toResponseDto(memberRepository.save(updated));
@@ -61,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(Long memberId) {
         if (!memberRepository.existsById(memberId)) {
-            throw new RuntimeException("Member not found");
+            throw new ResourceNotFoundException("Member not found with ID: " + memberId);
         }
         memberRepository.deleteById(memberId);
     }
@@ -69,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseDto getMemberById(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member with ID " + memberId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Member with ID " + memberId + " not found"));
         return MemberMapper.toResponseDto(member);
     }
 
@@ -80,6 +81,7 @@ public class MemberServiceImpl implements MemberService {
                 .map(MemberMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+
     @Override
     public Optional<MemberResponseDto> getMemberByEmail(String email) {
         return memberRepository.findByEmail(email)

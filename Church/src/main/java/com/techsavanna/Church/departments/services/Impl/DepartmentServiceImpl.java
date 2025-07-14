@@ -5,6 +5,7 @@ import com.techsavanna.Church.departments.mappers.DepartmentMapper;
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.departments.repos.DepartmentRepository;
 import com.techsavanna.Church.departments.services.DepartmentService;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentResponseDto createDepartment(DepartmentCreateDto dto) {
         Member leader = memberRepository.findById(dto.getLeaderId())
-                .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + dto.getLeaderId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Leader not found with ID: " + dto.getLeaderId()));
 
         Department department = DepartmentMapper.toEntity(dto, leader);
         Department saved = departmentRepository.save(department);
@@ -38,12 +39,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentResponseDto updateDepartment(Long departmentId, DepartmentUpdateDto dto) {
         Department existing = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + departmentId));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + departmentId));
 
         Member leader = null;
         if (dto.getLeaderId() != null) {
             leader = memberRepository.findById(dto.getLeaderId())
-                    .orElseThrow(() -> new RuntimeException("Leader not found with ID: " + dto.getLeaderId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Leader not found with ID: " + dto.getLeaderId()));
         }
 
         DepartmentMapper.updateEntity(existing, dto, leader);
@@ -54,7 +55,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartment(Long departmentId) {
         if (!departmentRepository.existsById(departmentId)) {
-            throw new RuntimeException("Department not found with ID: " + departmentId);
+            throw new ResourceNotFoundException("Department not found with ID: " + departmentId);
         }
         departmentRepository.deleteById(departmentId);
     }
@@ -62,7 +63,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentResponseDto getDepartmentById(Long departmentId) {
         Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Department not found with ID: " + departmentId));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + departmentId));
         return DepartmentMapper.toResponseDto(department);
     }
 

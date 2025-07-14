@@ -9,9 +9,9 @@ import com.techsavanna.Church.attendance.repos.AttendanceRepository;
 import com.techsavanna.Church.attendance.services.AttendanceService;
 import com.techsavanna.Church.events.models.Event;
 import com.techsavanna.Church.events.repos.EventRepository;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +33,10 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public AttendanceResponseDto createAttendance(AttendanceCreateDto dto) {
         Member member = memberRepository.findById(dto.getMemberId())
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found with ID: " + dto.getMemberId()));
 
         Event event = eventRepository.findById(dto.getEventId())
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + dto.getEventId()));
 
         Attendance attendance = AttendanceMapper.toEntity(member, event, dto);
         Attendance saved = attendanceRepository.save(attendance);
@@ -46,7 +46,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public AttendanceResponseDto updateAttendance(Long attendanceId, AttendanceUpdateDto dto) {
         Attendance attendance = attendanceRepository.findById(attendanceId)
-                .orElseThrow(() -> new RuntimeException("Attendance not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with ID: " + attendanceId));
 
         Attendance updated = AttendanceMapper.toUpdatedEntity(attendance, dto);
         return AttendanceMapper.toResponseDto(attendanceRepository.save(updated));
@@ -55,7 +55,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void deleteAttendance(Long attendanceId) {
         if (!attendanceRepository.existsById(attendanceId)) {
-            throw new RuntimeException("Attendance not found");
+            throw new ResourceNotFoundException("Attendance not found with ID: " + attendanceId);
         }
         attendanceRepository.deleteById(attendanceId);
     }
@@ -63,7 +63,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public AttendanceResponseDto getAttendanceById(Long attendanceId) {
         Attendance attendance = attendanceRepository.findById(attendanceId)
-                .orElseThrow(() -> new RuntimeException("Attendance not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with ID: " + attendanceId));
         return AttendanceMapper.toResponseDto(attendance);
     }
 

@@ -5,9 +5,9 @@ import com.techsavanna.Church.announcements.mappers.AnnouncementMapper;
 import com.techsavanna.Church.announcements.models.Announcement;
 import com.techsavanna.Church.announcements.repos.AnnouncementRepository;
 import com.techsavanna.Church.announcements.services.AnnouncementService;
-
 import com.techsavanna.Church.enums.AnnouncementStatus;
-import com.techsavanna.Church.announcements.dtos.AnnouncementResponseDto;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public AnnouncementResponseDto updateAnnouncement(Long announcementId, AnnouncementUpdateDto dto) {
         Announcement announcement = repository.findById(announcementId)
-                .orElseThrow(() -> new RuntimeException("Announcement not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Announcement not found with ID: " + announcementId));
 
         AnnouncementMapper.updateEntity(announcement, dto);
         return AnnouncementMapper.toResponseDto(repository.save(announcement));
@@ -42,7 +42,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public void deleteAnnouncement(Long announcementId) {
         if (!repository.existsById(announcementId)) {
-            throw new RuntimeException("Announcement not found");
+            throw new ResourceNotFoundException("Announcement not found with ID: " + announcementId);
         }
         repository.deleteById(announcementId);
     }
@@ -50,7 +50,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public AnnouncementResponseDto getAnnouncementById(Long announcementId) {
         Announcement announcement = repository.findById(announcementId)
-                .orElseThrow(() -> new RuntimeException("Announcement not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Announcement not found with ID: " + announcementId));
         return AnnouncementMapper.toResponseDto(announcement);
     }
 

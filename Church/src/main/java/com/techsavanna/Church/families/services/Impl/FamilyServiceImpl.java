@@ -1,5 +1,6 @@
 package com.techsavanna.Church.families.services.Impl;
 
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.families.dtos.FamilyCreateDto;
 import com.techsavanna.Church.families.dtos.FamilyResponseDto;
 import com.techsavanna.Church.families.dtos.FamilyUpdateDto;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FamilyServiceImpl implements FamilyService {
+
     @Autowired
     private FamilyRepository familyRepository;
 
@@ -28,7 +30,7 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public FamilyResponseDto updateFamily(Long familyId, FamilyUpdateDto dto) {
         Family family = familyRepository.findById(familyId)
-                .orElseThrow(() -> new RuntimeException("Family not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Family not found with ID: " + familyId));
         Family updated = FamilyMapper.toUpdatedEntity(family, dto);
         return FamilyMapper.toResponseDto(familyRepository.save(updated));
     }
@@ -36,7 +38,7 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public void deleteFamily(Long familyId) {
         if (!familyRepository.existsById(familyId)) {
-            throw new RuntimeException("Family not found");
+            throw new ResourceNotFoundException("Family not found with ID: " + familyId);
         }
         familyRepository.deleteById(familyId);
     }
@@ -44,7 +46,7 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public FamilyResponseDto getFamilyById(Long familyId) {
         Family family = familyRepository.findById(familyId)
-                .orElseThrow(() -> new RuntimeException("Family with ID " + familyId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Family with ID " + familyId + " not found"));
         return FamilyMapper.toResponseDto(family);
     }
 
@@ -55,5 +57,4 @@ public class FamilyServiceImpl implements FamilyService {
                 .map(FamilyMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
-
 }
