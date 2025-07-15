@@ -1,44 +1,34 @@
 package com.techsavanna.Church.members.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techsavanna.Church.members.dtos.MemberCreateDto;
 import com.techsavanna.Church.members.dtos.MemberUpdateDto;
 import com.techsavanna.Church.members.enums.BaptismStatus;
 import com.techsavanna.Church.members.services.MemberService;
-import com.techsavanna.Church.responses.ApiResponse;
 import com.techsavanna.Church.members.dtos.MemberResponseDto;
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/members")
-@CrossOrigin(origins = "http://localhost:5173")
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
 
-    // ✅ Create member (pure JSON, no image)
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<ApiResponse<MemberResponseDto>> createMember(@RequestBody MemberCreateDto memberDto) {
-        return ResponseEntity
-                .status(201)
-                .body(memberService.createMember(memberDto, null)); // No image uploaded
+    @PostMapping
+    public ResponseEntity<ApiResponse<MemberResponseDto>> createMember(@RequestBody MemberCreateDto dto) {
+        return ResponseEntity.ok(memberService.createMember(dto, null));
     }
 
-    // ✅ Update member (pure JSON, no image)
-    @PutMapping(value = "/{memberId}", consumes = "application/json")
+    @PutMapping("/{memberId}")
     public ResponseEntity<ApiResponse<MemberResponseDto>> updateMember(
             @PathVariable Long memberId,
-            @RequestBody MemberUpdateDto memberDto) {
-        return ResponseEntity
-                .ok(memberService.updateMember(memberId, memberDto, null));
+            @RequestBody MemberUpdateDto dto) {
+        return ResponseEntity.ok(memberService.updateMember(memberId, dto, null));
     }
 
     @DeleteMapping("/{memberId}")
@@ -58,12 +48,7 @@ public class MemberController {
 
     @GetMapping("/by-email")
     public ResponseEntity<ApiResponse<MemberResponseDto>> getMemberByEmail(@RequestParam String email) {
-        return memberService.getMemberByEmail(email)
-                .map(ResponseEntity::ok)
-                .orElseGet(() ->
-                        ResponseEntity.status(404).body(
-                                new ApiResponse<>("error", "Member not found", null)
-                        ));
+        return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
     @GetMapping("/search-by-name")
@@ -91,4 +76,3 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMembersByBaptismStatus(status));
     }
 }
-

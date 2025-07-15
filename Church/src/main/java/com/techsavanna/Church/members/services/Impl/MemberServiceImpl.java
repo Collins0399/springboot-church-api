@@ -2,6 +2,7 @@ package com.techsavanna.Church.members.services.Impl;
 
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.departments.repos.DepartmentRepository;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.families.models.Family;
 import com.techsavanna.Church.families.repos.FamilyRepository;
 import com.techsavanna.Church.members.dtos.MemberCreateDto;
@@ -22,20 +23,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private FamilyRepository familyRepository;
-
-    @Autowired
-    private DepartmentRepository departmentRepository;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private FamilyRepository familyRepository;
+    @Autowired private DepartmentRepository departmentRepository;
 
     private static final String UPLOAD_DIR = "uploads/profile-pictures/";
 
@@ -58,43 +53,37 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ApiResponse<MemberResponseDto> createMember(MemberCreateDto dto, MultipartFile profilePicture) {
-        Family family = null;
-        if (dto.getFamilyId() != null) {
-            family = familyRepository.findById(dto.getFamilyId())
-                    .orElseThrow(() -> new RuntimeException("Family not found with ID: " + dto.getFamilyId()));
-        }
+        Family family = dto.getFamilyId() != null
+                ? familyRepository.findById(dto.getFamilyId())
+                .orElseThrow(() -> new ResourceNotFoundException("Family not found with ID: " + dto.getFamilyId()))
+                : null;
 
-        Department department = null;
-        if (dto.getDepartmentId() != null) {
-            department = departmentRepository.findById(dto.getDepartmentId())
-                    .orElseThrow(() -> new RuntimeException("Department not found with ID: " + dto.getDepartmentId()));
-        }
+        Department department = dto.getDepartmentId() != null
+                ? departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + dto.getDepartmentId()))
+                : null;
 
         String storedPath = saveProfilePicture(profilePicture);
         dto.setProfilePicturePath(storedPath);
 
-        Member member = MemberMapper.toEntity(dto, family, department);
-        Member savedMember = memberRepository.save(member);
-
-        return new ApiResponse<>("success", "Member created successfully", MemberMapper.toResponseDto(savedMember));
+        Member saved = memberRepository.save(MemberMapper.toEntity(dto, family, department));
+        return new ApiResponse<>("success", "Member created successfully", MemberMapper.toResponseDto(saved));
     }
 
     @Override
     public ApiResponse<MemberResponseDto> updateMember(Long memberId, MemberUpdateDto dto, MultipartFile profilePicture) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found with ID: " + memberId));
 
-        Family family = null;
-        if (dto.getFamilyId() != null) {
-            family = familyRepository.findById(dto.getFamilyId())
-                    .orElseThrow(() -> new RuntimeException("Family not found with ID: " + dto.getFamilyId()));
-        }
+        Family family = dto.getFamilyId() != null
+                ? familyRepository.findById(dto.getFamilyId())
+                .orElseThrow(() -> new ResourceNotFoundException("Family not found with ID: " + dto.getFamilyId()))
+                : null;
 
-        Department department = null;
-        if (dto.getDepartmentId() != null) {
-            department = departmentRepository.findById(dto.getDepartmentId())
-                    .orElseThrow(() -> new RuntimeException("Department not found with ID: " + dto.getDepartmentId()));
-        }
+        Department department = dto.getDepartmentId() != null
+                ? departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + dto.getDepartmentId()))
+                : null;
 
         String storedPath = (profilePicture != null && !profilePicture.isEmpty())
                 ? saveProfilePicture(profilePicture)
@@ -109,7 +98,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ApiResponse<Void> deleteMember(Long memberId) {
         if (!memberRepository.existsById(memberId)) {
-            throw new RuntimeException("Member not found");
+            throw new ResourceNotFoundException("Member not found with ID: " + memberId);
         }
         memberRepository.deleteById(memberId);
         return new ApiResponse<>("success", "Member deleted successfully", null);
@@ -118,69 +107,68 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ApiResponse<MemberResponseDto> getMemberById(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member with ID " + memberId + " not found"));
-        return new ApiResponse<>("success", "Member fetched successfully", MemberMapper.toResponseDto(member));
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found with ID: " + memberId));
+        return new ApiResponse<>("success", "Member found", MemberMapper.toResponseDto(member));
     }
 
     @Override
     public ApiResponse<List<MemberResponseDto>> getAllMembers() {
-        List<MemberResponseDto> members = memberRepository.findAll()
+        List<MemberResponseDto> list = memberRepository.findAll()
                 .stream()
                 .map(MemberMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return new ApiResponse<>("success", "All members retrieved successfully", members);
+        return new ApiResponse<>("success", "All members retrieved", list);
     }
 
     @Override
-    public Optional<ApiResponse<MemberResponseDto>> getMemberByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .map(member -> new ApiResponse<>("success", "Member found", MemberMapper.toResponseDto(member)))
-                .map(Optional::of)
-                .orElse(Optional.empty());
+    public ApiResponse<MemberResponseDto> getMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found with email: " + email));
+        return new ApiResponse<>("success", "Member found", MemberMapper.toResponseDto(member));
     }
 
     @Override
     public ApiResponse<List<MemberResponseDto>> searchByFirstName(String namePart) {
-        List<MemberResponseDto> results = memberRepository.findByFirstNameContainingIgnoreCase(namePart)
+        List<MemberResponseDto> list = memberRepository.findByFirstNameContainingIgnoreCase(namePart)
                 .stream()
                 .map(MemberMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members matching name found", results);
+        return new ApiResponse<>("success", "Search results", list);
     }
 
     @Override
     public ApiResponse<List<MemberResponseDto>> getMembersByMaritalStatus(String maritalStatus) {
-        List<MemberResponseDto> results = memberRepository.findByMaritalStatus(maritalStatus)
+        List<MemberResponseDto> list = memberRepository.findByMaritalStatus(maritalStatus)
                 .stream()
                 .map(MemberMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by marital status retrieved", results);
+        return new ApiResponse<>("success", "Members by marital status retrieved", list);
     }
 
     @Override
     public ApiResponse<List<MemberResponseDto>> getMembersByDepartment(String departmentName) {
-        List<MemberResponseDto> results = memberRepository.findByDepartmentIgnoreCase(departmentName)
+        List<MemberResponseDto> list = memberRepository.findByDepartmentIgnoreCase(departmentName)
                 .stream()
                 .map(MemberMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by department retrieved", results);
+        return new ApiResponse<>("success", "Members by department retrieved", list);
     }
 
     @Override
     public ApiResponse<List<MemberResponseDto>> getMembersByFamilyName(String familyName) {
-        List<MemberResponseDto> results = memberRepository.findByFamily_FamilyNameIgnoreCase(familyName)
+        List<MemberResponseDto> list = memberRepository.findByFamily_FamilyNameIgnoreCase(familyName)
                 .stream()
                 .map(MemberMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by family name retrieved", results);
+        return new ApiResponse<>("success", "Members by family name retrieved", list);
     }
 
     @Override
     public ApiResponse<List<MemberResponseDto>> getMembersByBaptismStatus(BaptismStatus status) {
-        List<MemberResponseDto> results = memberRepository.findByBaptismStatus(status)
+        List<MemberResponseDto> list = memberRepository.findByBaptismStatus(status)
                 .stream()
                 .map(MemberMapper::toResponseDto)
                 .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by baptism status retrieved", results);
+        return new ApiResponse<>("success", "Members by baptism status retrieved", list);
     }
 }
