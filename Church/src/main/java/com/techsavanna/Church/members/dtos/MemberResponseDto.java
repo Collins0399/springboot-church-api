@@ -1,5 +1,7 @@
 package com.techsavanna.Church.members.dtos;
 
+import com.techsavanna.Church.members.enums.BaptismStatus;
+import com.techsavanna.Church.members.enums.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,7 +13,7 @@ public class MemberResponseDto {
     private Long departmentId;
     private String firstName;
     private String lastName;
-    private String gender;
+    private Gender gender;
     private LocalDate dateOfBirth;
     private String maritalStatus;
 
@@ -22,12 +24,12 @@ public class MemberResponseDto {
     private String city;
     private String postalCode;
 
-    private Boolean baptismStatus;
+    private BaptismStatus baptismStatus;
     private LocalDate baptismDate;
 
     private LocalDate joinedDate;
 
     private String occupation;
     private String roleInChurch;
-    private String profilePictureUrl;
+    private String profilePicturePath;
 }

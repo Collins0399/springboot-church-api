@@ -11,8 +11,9 @@ public class MemberMapper {
 
     public static Member toEntity(MemberCreateDto dto, Family family, Department department) {
         Member member = new Member();
-        member.setFamily(family);
-        member.setDepartment(department);
+
+        if (family != null) member.setFamily(family);
+        if (department != null) member.setDepartment(department);
 
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
@@ -30,14 +31,14 @@ public class MemberMapper {
         member.setJoinedDate(dto.getJoinedDate());
         member.setOccupation(dto.getOccupation());
         member.setRoleInChurch(dto.getRoleInChurch());
-        member.setProfilePictureUrl(dto.getProfilePictureUrl());
+        member.setProfilePicturePath(dto.getProfilePicturePath());
 
         return member;
     }
 
     public static Member toUpdatedEntity(Member member, MemberUpdateDto dto, Family family, Department department) {
-        member.setFamily(family);
-        member.setDepartment(department);
+        if (family != null) member.setFamily(family);
+        if (department != null) member.setDepartment(department);
 
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
@@ -55,7 +56,7 @@ public class MemberMapper {
         member.setJoinedDate(dto.getJoinedDate());
         member.setOccupation(dto.getOccupation());
         member.setRoleInChurch(dto.getRoleInChurch());
-        member.setProfilePictureUrl(dto.getProfilePictureUrl());
+        member.setProfilePicturePath(dto.getProfilePicturePath());
 
         return member;
     }
@@ -79,11 +80,12 @@ public class MemberMapper {
         dto.setJoinedDate(member.getJoinedDate());
         dto.setOccupation(member.getOccupation());
         dto.setRoleInChurch(member.getRoleInChurch());
-        dto.setProfilePictureUrl(member.getProfilePictureUrl());
+        dto.setProfilePicturePath(member.getProfilePicturePath());
 
         if (member.getFamily() != null) {
             dto.setFamilyId(member.getFamily().getFamilyId());
         }
+
         if (member.getDepartment() != null) {
             dto.setDepartmentId(member.getDepartment().getDepartmentId());
         }
@@ -91,4 +93,3 @@ public class MemberMapper {
         return dto;
     }
 }
-

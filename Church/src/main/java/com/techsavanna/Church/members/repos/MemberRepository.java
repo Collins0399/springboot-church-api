@@ -1,6 +1,7 @@
 package com.techsavanna.Church.members.repos;
 
 import com.techsavanna.Church.departments.models.Department;
+import com.techsavanna.Church.members.enums.BaptismStatus;
 import com.techsavanna.Church.members.models.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,6 +29,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         List<Member> findByFamily_FamilyNameIgnoreCase(@Param("familyName") String familyName);
 
         @Query("SELECT m FROM Member m WHERE m.baptismStatus = :status")
-        List<Member> findByBaptismStatus(@Param("status") boolean status);
-    }
+        List<Member> findByBaptismStatus(@Param("status") BaptismStatus status);
+}
 

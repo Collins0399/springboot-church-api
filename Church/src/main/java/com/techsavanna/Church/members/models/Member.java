@@ -5,6 +5,8 @@ import com.techsavanna.Church.attendance.models.Attendance;
 import com.techsavanna.Church.contributions.models.Contribution;
 import com.techsavanna.Church.departments.models.Department;
 import com.techsavanna.Church.families.models.Family;
+import com.techsavanna.Church.members.enums.BaptismStatus;
+import com.techsavanna.Church.members.enums.Gender;
 import com.techsavanna.Church.sermons.models.Sermon;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +28,8 @@ public class Member {
     @Setter @Getter
     private String lastName;
     @Setter @Getter
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     @Setter @Getter
     private LocalDate dateOfBirth;
     @Setter @Getter
@@ -47,7 +50,8 @@ public class Member {
     private String postalCode;
 
     @Setter @Getter
-    private Boolean baptismStatus;
+    @Enumerated(EnumType.STRING)
+    private BaptismStatus baptismStatus;
     @Setter @Getter
     private LocalDate baptismDate;
 
@@ -58,8 +62,11 @@ public class Member {
     private String occupation;
     @Setter @Getter
     private String roleInChurch;
+
     @Setter @Getter
-    private String profilePictureUrl;
+    @Column(name = "profile_picture_path")
+    private String profilePicturePath;
+
 
     @Setter @Getter
     @ManyToOne
