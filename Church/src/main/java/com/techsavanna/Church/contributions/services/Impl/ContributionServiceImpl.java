@@ -10,6 +10,7 @@ import com.techsavanna.Church.contributions.services.ContributionService;
 import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,43 +27,51 @@ public class ContributionServiceImpl implements ContributionService {
     private MemberRepository memberRepository;
 
     @Override
-    public ContributionResponseDto createContribution(ContributionCreateDto dto) {
+    public ApiResponse<ContributionResponseDto> createContribution(ContributionCreateDto dto) {
         Member member = memberRepository.findById(dto.getMemberId())
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found with ID: " + dto.getMemberId()));
+
         Contribution contribution = ContributionMapper.toEntity(dto, member);
         Contribution saved = contributionRepository.save(contribution);
-        return ContributionMapper.toResponseDto(saved);
+
+        return new ApiResponse<>("success", "Contribution created successfully", ContributionMapper.toResponseDto(saved));
     }
 
     @Override
-    public ContributionResponseDto updateContribution(Long contributionId, ContributionUpdateDto dto) {
+    public ApiResponse<ContributionResponseDto> updateContribution(Long contributionId, ContributionUpdateDto dto) {
         Contribution contribution = contributionRepository.findById(contributionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Contribution not found with ID: " + contributionId));
+
         ContributionMapper.updateEntity(contribution, dto);
         Contribution updated = contributionRepository.save(contribution);
-        return ContributionMapper.toResponseDto(updated);
+
+        return new ApiResponse<>("success", "Contribution updated successfully", ContributionMapper.toResponseDto(updated));
     }
 
     @Override
-    public void deleteContribution(Long contributionId) {
+    public ApiResponse<Void> deleteContribution(Long contributionId) {
         if (!contributionRepository.existsById(contributionId)) {
             throw new ResourceNotFoundException("Contribution not found with ID: " + contributionId);
         }
         contributionRepository.deleteById(contributionId);
+        return new ApiResponse<>("success", "Contribution deleted successfully", null);
     }
 
     @Override
-    public ContributionResponseDto getContributionById(Long contributionId) {
+    public ApiResponse<ContributionResponseDto> getContributionById(Long contributionId) {
         Contribution contribution = contributionRepository.findById(contributionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Contribution not found with ID: " + contributionId));
-        return ContributionMapper.toResponseDto(contribution);
+
+        return new ApiResponse<>("success", "Contribution fetched successfully", ContributionMapper.toResponseDto(contribution));
     }
 
     @Override
-    public List<ContributionResponseDto> getAllContributions() {
-        return contributionRepository.findAll()
+    public ApiResponse<List<ContributionResponseDto>> getAllContributions() {
+        List<ContributionResponseDto> list = contributionRepository.findAll()
                 .stream()
                 .map(ContributionMapper::toResponseDto)
                 .collect(Collectors.toList());
+
+        return new ApiResponse<>("success", "All contributions retrieved successfully", list);
     }
 }

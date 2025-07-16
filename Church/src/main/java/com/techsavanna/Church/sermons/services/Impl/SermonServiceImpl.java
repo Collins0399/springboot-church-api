@@ -3,6 +3,7 @@ package com.techsavanna.Church.sermons.services.Impl;
 import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
+import com.techsavanna.Church.responses.ApiResponse;
 import com.techsavanna.Church.sermons.dtos.SermonCreateDto;
 import com.techsavanna.Church.sermons.dtos.SermonResponseDto;
 import com.techsavanna.Church.sermons.dtos.SermonUpdateDto;
@@ -26,32 +27,18 @@ public class SermonServiceImpl implements SermonService {
     private MemberRepository memberRepository;
 
     @Override
-    public SermonResponseDto createSermon(SermonCreateDto dto) {
+    public ApiResponse<SermonResponseDto> createSermon(SermonCreateDto dto) {
         Member preacher = memberRepository.findById(dto.getPreacherId())
                 .orElseThrow(() -> new ResourceNotFoundException("Preacher not found with ID: " + dto.getPreacherId()));
 
         Sermon sermon = SermonMapper.toEntity(dto, preacher);
         Sermon saved = sermonRepository.save(sermon);
-        return SermonMapper.toResponseDto(saved);
+        SermonResponseDto response = SermonMapper.toResponseDto(saved);
+        return new ApiResponse<>("success", "Sermon created successfully", response);
     }
 
     @Override
-    public List<SermonResponseDto> getAllSermons() {
-        return sermonRepository.findAll()
-                .stream()
-                .map(SermonMapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public SermonResponseDto getSermonById(Long sermonId) {
-        Sermon sermon = sermonRepository.findById(sermonId)
-                .orElseThrow(() -> new ResourceNotFoundException("Sermon not found with ID: " + sermonId));
-        return SermonMapper.toResponseDto(sermon);
-    }
-
-    @Override
-    public SermonResponseDto updateSermon(Long sermonId, SermonUpdateDto dto) {
+    public ApiResponse<SermonResponseDto> updateSermon(Long sermonId, SermonUpdateDto dto) {
         Sermon existing = sermonRepository.findById(sermonId)
                 .orElseThrow(() -> new ResourceNotFoundException("Sermon not found with ID: " + sermonId));
 
@@ -60,14 +47,33 @@ public class SermonServiceImpl implements SermonService {
 
         Sermon updated = SermonMapper.toUpdatedEntity(existing, dto, preacher);
         Sermon saved = sermonRepository.save(updated);
-        return SermonMapper.toResponseDto(saved);
+        SermonResponseDto response = SermonMapper.toResponseDto(saved);
+        return new ApiResponse<>("success", "Sermon updated successfully", response);
     }
 
     @Override
-    public void deleteSermon(Long sermonId) {
+    public ApiResponse<Void> deleteSermon(Long sermonId) {
         if (!sermonRepository.existsById(sermonId)) {
             throw new ResourceNotFoundException("Sermon not found with ID: " + sermonId);
         }
         sermonRepository.deleteById(sermonId);
+        return new ApiResponse<>("success", "Sermon deleted successfully", null);
+    }
+
+    @Override
+    public ApiResponse<SermonResponseDto> getSermonById(Long sermonId) {
+        Sermon sermon = sermonRepository.findById(sermonId)
+                .orElseThrow(() -> new ResourceNotFoundException("Sermon not found with ID: " + sermonId));
+        SermonResponseDto response = SermonMapper.toResponseDto(sermon);
+        return new ApiResponse<>("success", "Sermon retrieved successfully", response);
+    }
+
+    @Override
+    public ApiResponse<List<SermonResponseDto>> getAllSermons() {
+        List<SermonResponseDto> sermons = sermonRepository.findAll()
+                .stream()
+                .map(SermonMapper::toResponseDto)
+                .collect(Collectors.toList());
+        return new ApiResponse<>("success", "All sermons retrieved successfully", sermons);
     }
 }

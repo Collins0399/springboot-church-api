@@ -6,51 +6,39 @@ import com.techsavanna.Church.sermons.dtos.SermonResponseDto;
 import com.techsavanna.Church.sermons.dtos.SermonUpdateDto;
 import com.techsavanna.Church.sermons.services.SermonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/sermons")
-@CrossOrigin(origins = "http://localhost:5173")
 public class SermonController {
+
     @Autowired
     private SermonService sermonService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<SermonResponseDto>> createSermon(@RequestBody SermonCreateDto dto) {
-        SermonResponseDto created = sermonService.createSermon(dto);
-        ApiResponse<SermonResponseDto> response = new ApiResponse<>("success", "Sermon created successfully", created);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ApiResponse<SermonResponseDto> createSermon(@RequestBody SermonCreateDto dto) {
+        return sermonService.createSermon(dto);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<SermonResponseDto>>> getAllSermons() {
-        List<SermonResponseDto> sermons = sermonService.getAllSermons();
-        ApiResponse<List<SermonResponseDto>> response = new ApiResponse<>("success", "All sermons retrieved successfully", sermons);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<List<SermonResponseDto>> getAllSermons() {
+        return sermonService.getAllSermons();
     }
 
     @GetMapping("/{sermonId}")
-    public ResponseEntity<ApiResponse<SermonResponseDto>> getSermonById(@PathVariable Long sermonId) {
-        SermonResponseDto sermon = sermonService.getSermonById(sermonId);
-        ApiResponse<SermonResponseDto> response = new ApiResponse<>("success", "Sermon fetched successfully", sermon);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<SermonResponseDto> getSermonById(@PathVariable Long sermonId) {
+        return sermonService.getSermonById(sermonId);
     }
 
     @PutMapping("/{sermonId}")
-    public ResponseEntity<ApiResponse<SermonResponseDto>> updateSermon(@PathVariable Long sermonId, @RequestBody SermonUpdateDto dto) {
-        SermonResponseDto updated = sermonService.updateSermon(sermonId, dto);
-        ApiResponse<SermonResponseDto> response = new ApiResponse<>("success", "Sermon updated successfully", updated);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<SermonResponseDto> updateSermon(@PathVariable Long sermonId, @RequestBody SermonUpdateDto dto) {
+        return sermonService.updateSermon(sermonId, dto);
     }
 
     @DeleteMapping("/{sermonId}")
-    public ResponseEntity<ApiResponse<String>> deleteSermon(@PathVariable Long sermonId) {
-        sermonService.deleteSermon(sermonId);
-        ApiResponse<String> response = new ApiResponse<>("success", "Sermon deleted successfully", "Sermon deleted successfully");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<Void> deleteSermon(@PathVariable Long sermonId) {
+        return sermonService.deleteSermon(sermonId);
     }
 }

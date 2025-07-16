@@ -6,52 +6,39 @@ import com.techsavanna.Church.contributions.dtos.ContributionUpdateDto;
 import com.techsavanna.Church.contributions.services.ContributionService;
 import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/contributions")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ContributionController {
 
     @Autowired
     private ContributionService contributionService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ContributionResponseDto>> createContribution(@RequestBody ContributionCreateDto dto) {
-        ContributionResponseDto result = contributionService.createContribution(dto);
-        ApiResponse<ContributionResponseDto> response = new ApiResponse<>("success", "Contribution created successfully", result);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ApiResponse<ContributionResponseDto> createContribution(@RequestBody ContributionCreateDto dto) {
+        return contributionService.createContribution(dto);
     }
 
     @PutMapping("/{contributionId}")
-    public ResponseEntity<ApiResponse<ContributionResponseDto>> updateContribution(@PathVariable Long contributionId, @RequestBody ContributionUpdateDto dto) {
-        ContributionResponseDto result = contributionService.updateContribution(contributionId, dto);
-        ApiResponse<ContributionResponseDto> response = new ApiResponse<>("success", "Contribution updated successfully", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<ContributionResponseDto> updateContribution(@PathVariable Long contributionId, @RequestBody ContributionUpdateDto dto) {
+        return contributionService.updateContribution(contributionId, dto);
     }
 
     @DeleteMapping("/{contributionId}")
-    public ResponseEntity<ApiResponse<String>> deleteContribution(@PathVariable Long contributionId) {
-        contributionService.deleteContribution(contributionId);
-        ApiResponse<String> response = new ApiResponse<>("success", "Contribution deleted successfully", "Contribution deleted successfully");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<Void> deleteContribution(@PathVariable Long contributionId) {
+        return contributionService.deleteContribution(contributionId);
     }
 
     @GetMapping("/{contributionId}")
-    public ResponseEntity<ApiResponse<ContributionResponseDto>> getContributionById(@PathVariable Long contributionId) {
-        ContributionResponseDto result = contributionService.getContributionById(contributionId);
-        ApiResponse<ContributionResponseDto> response = new ApiResponse<>("success", "Contribution fetched successfully", result);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<ContributionResponseDto> getContributionById(@PathVariable Long contributionId) {
+        return contributionService.getContributionById(contributionId);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ContributionResponseDto>>> getAllContributions() {
-        List<ContributionResponseDto> contributions = contributionService.getAllContributions();
-        ApiResponse<List<ContributionResponseDto>> response = new ApiResponse<>("success", "All contributions retrieved successfully", contributions);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ApiResponse<List<ContributionResponseDto>> getAllContributions() {
+        return contributionService.getAllContributions();
     }
 }

@@ -8,6 +8,7 @@ import com.techsavanna.Church.departments.services.DepartmentService;
 import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +28,18 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentResponseDto createDepartment(DepartmentCreateDto dto) {
+    public ApiResponse<DepartmentResponseDto> createDepartment(DepartmentCreateDto dto) {
         Member leader = memberRepository.findById(dto.getLeaderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Leader not found with ID: " + dto.getLeaderId()));
 
         Department department = DepartmentMapper.toEntity(dto, leader);
         Department saved = departmentRepository.save(department);
-        return DepartmentMapper.toResponseDto(saved);
+
+        return new ApiResponse<>("success", "Department created successfully", DepartmentMapper.toResponseDto(saved));
     }
 
     @Override
-    public DepartmentResponseDto updateDepartment(Long departmentId, DepartmentUpdateDto dto) {
+    public ApiResponse<DepartmentResponseDto> updateDepartment(Long departmentId, DepartmentUpdateDto dto) {
         Department existing = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + departmentId));
 
@@ -49,30 +51,32 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         DepartmentMapper.updateEntity(existing, dto, leader);
         Department updated = departmentRepository.save(existing);
-        return DepartmentMapper.toResponseDto(updated);
+
+        return new ApiResponse<>("success", "Department updated successfully", DepartmentMapper.toResponseDto(updated));
     }
 
     @Override
-    public void deleteDepartment(Long departmentId) {
+    public ApiResponse<Void> deleteDepartment(Long departmentId) {
         if (!departmentRepository.existsById(departmentId)) {
             throw new ResourceNotFoundException("Department not found with ID: " + departmentId);
         }
         departmentRepository.deleteById(departmentId);
+        return new ApiResponse<>("success", "Department deleted successfully", null);
     }
 
     @Override
-    public DepartmentResponseDto getDepartmentById(Long departmentId) {
+    public ApiResponse<DepartmentResponseDto> getDepartmentById(Long departmentId) {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + departmentId));
-        return DepartmentMapper.toResponseDto(department);
+        return new ApiResponse<>("success", "Department fetched successfully", DepartmentMapper.toResponseDto(department));
     }
 
     @Override
-    public List<DepartmentResponseDto> getAllDepartments() {
+    public ApiResponse<List<DepartmentResponseDto>> getAllDepartments() {
         List<Department> departments = departmentRepository.findAll();
-        return departments.stream()
+        List<DepartmentResponseDto> responseList = departments.stream()
                 .map(DepartmentMapper::toResponseDto)
                 .collect(Collectors.toList());
+        return new ApiResponse<>("success", "All departments retrieved successfully", responseList);
     }
-
 }

@@ -5,9 +5,10 @@ import com.techsavanna.Church.members.dtos.MemberResponseDto;
 import com.techsavanna.Church.members.dtos.MemberUpdateDto;
 import com.techsavanna.Church.members.enums.BaptismStatus;
 import com.techsavanna.Church.responses.ApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 public interface MemberService {
 
@@ -21,15 +22,15 @@ public interface MemberService {
 
     ApiResponse<MemberResponseDto> getMemberByEmail(String email);
 
-    ApiResponse<List<MemberResponseDto>> getAllMembers();
+    ApiResponse<Page<MemberResponseDto>> getAllMembers(Pageable pageable);
 
-    ApiResponse<List<MemberResponseDto>> searchByFirstName(String namePart);
+    ApiResponse<Page<MemberResponseDto>> searchByFirstName(String namePart, Pageable pageable);
 
-    ApiResponse<List<MemberResponseDto>> getMembersByMaritalStatus(String maritalStatus);
+    ApiResponse<Page<MemberResponseDto>> getMembersByMaritalStatus(String maritalStatus, Pageable pageable);
 
-    ApiResponse<List<MemberResponseDto>> getMembersByDepartment(String departmentName);
+    ApiResponse<Page<MemberResponseDto>> getMembersByDepartment(String departmentName, Pageable pageable);
 
-    ApiResponse<List<MemberResponseDto>> getMembersByFamilyName(String familyName);
+    ApiResponse<Page<MemberResponseDto>> getMembersByFamilyName(String familyName, Pageable pageable);
 
-    ApiResponse<List<MemberResponseDto>> getMembersByBaptismStatus(BaptismStatus status);
+    ApiResponse<Page<MemberResponseDto>> getMembersByBaptismStatus(BaptismStatus status, Pageable pageable);
 }

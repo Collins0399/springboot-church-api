@@ -15,6 +15,8 @@ import com.techsavanna.Church.members.repos.MemberRepository;
 import com.techsavanna.Church.members.services.MemberService;
 import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -112,15 +114,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public ApiResponse<List<MemberResponseDto>> getAllMembers() {
-        List<MemberResponseDto> list = memberRepository.findAll()
-                .stream()
-                .map(MemberMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "All members retrieved", list);
-    }
-
-    @Override
     public ApiResponse<MemberResponseDto> getMemberByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found with email: " + email));
@@ -128,47 +121,45 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public ApiResponse<List<MemberResponseDto>> searchByFirstName(String namePart) {
-        List<MemberResponseDto> list = memberRepository.findByFirstNameContainingIgnoreCase(namePart)
-                .stream()
-                .map(MemberMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Search results", list);
+    public ApiResponse<Page<MemberResponseDto>> getAllMembers(Pageable pageable) {
+        Page<Member> page = memberRepository.findAll(pageable);
+        Page<MemberResponseDto> dtoPage = page.map(MemberMapper::toResponseDto);
+        return new ApiResponse<>("success", "All members retrieved", dtoPage);
     }
 
     @Override
-    public ApiResponse<List<MemberResponseDto>> getMembersByMaritalStatus(String maritalStatus) {
-        List<MemberResponseDto> list = memberRepository.findByMaritalStatus(maritalStatus)
-                .stream()
-                .map(MemberMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by marital status retrieved", list);
+    public ApiResponse<Page<MemberResponseDto>> searchByFirstName(String namePart, Pageable pageable) {
+        Page<Member> page = memberRepository.findByFirstNameContainingIgnoreCase(namePart, pageable);
+        Page<MemberResponseDto> dtoPage = page.map(MemberMapper::toResponseDto);
+        return new ApiResponse<>("success", "Search results", dtoPage);
     }
 
     @Override
-    public ApiResponse<List<MemberResponseDto>> getMembersByDepartment(String departmentName) {
-        List<MemberResponseDto> list = memberRepository.findByDepartmentIgnoreCase(departmentName)
-                .stream()
-                .map(MemberMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by department retrieved", list);
+    public ApiResponse<Page<MemberResponseDto>> getMembersByMaritalStatus(String maritalStatus, Pageable pageable) {
+        Page<Member> page = memberRepository.findByMaritalStatus(maritalStatus, pageable);
+        Page<MemberResponseDto> dtoPage = page.map(MemberMapper::toResponseDto);
+        return new ApiResponse<>("success", "Members by marital status retrieved", dtoPage);
     }
 
     @Override
-    public ApiResponse<List<MemberResponseDto>> getMembersByFamilyName(String familyName) {
-        List<MemberResponseDto> list = memberRepository.findByFamily_FamilyNameIgnoreCase(familyName)
-                .stream()
-                .map(MemberMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by family name retrieved", list);
+    public ApiResponse<Page<MemberResponseDto>> getMembersByDepartment(String departmentName, Pageable pageable) {
+        Page<Member> page = memberRepository.findByDepartmentIgnoreCase(departmentName, pageable);
+        Page<MemberResponseDto> dtoPage = page.map(MemberMapper::toResponseDto);
+        return new ApiResponse<>("success", "Members by department retrieved", dtoPage);
     }
 
     @Override
-    public ApiResponse<List<MemberResponseDto>> getMembersByBaptismStatus(BaptismStatus status) {
-        List<MemberResponseDto> list = memberRepository.findByBaptismStatus(status)
-                .stream()
-                .map(MemberMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Members by baptism status retrieved", list);
+    public ApiResponse<Page<MemberResponseDto>> getMembersByFamilyName(String familyName, Pageable pageable) {
+        Page<Member> page = memberRepository.findByFamily_FamilyNameIgnoreCase(familyName, pageable);
+        Page<MemberResponseDto> dtoPage = page.map(MemberMapper::toResponseDto);
+        return new ApiResponse<>("success", "Members by family name retrieved", dtoPage);
     }
+
+    @Override
+    public ApiResponse<Page<MemberResponseDto>> getMembersByBaptismStatus(BaptismStatus status, Pageable pageable) {
+        Page<Member> page = memberRepository.findByBaptismStatus(status, pageable);
+        Page<MemberResponseDto> dtoPage = page.map(MemberMapper::toResponseDto);
+        return new ApiResponse<>("success", "Members by baptism status retrieved", dtoPage);
+    }
+
 }

@@ -12,6 +12,7 @@ import com.techsavanna.Church.events.repos.EventRepository;
 import com.techsavanna.Church.handler.ResourceNotFoundException;
 import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
+import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private EventRepository eventRepository;
 
     @Override
-    public AttendanceResponseDto createAttendance(AttendanceCreateDto dto) {
+    public ApiResponse<AttendanceResponseDto> createAttendance(AttendanceCreateDto dto) {
         Member member = memberRepository.findById(dto.getMemberId())
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found with ID: " + dto.getMemberId()));
 
@@ -40,38 +41,41 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         Attendance attendance = AttendanceMapper.toEntity(member, event, dto);
         Attendance saved = attendanceRepository.save(attendance);
-        return AttendanceMapper.toResponseDto(saved);
+
+        return new ApiResponse<>("success", "Attendance created successfully", AttendanceMapper.toResponseDto(saved));
     }
 
     @Override
-    public AttendanceResponseDto updateAttendance(Long attendanceId, AttendanceUpdateDto dto) {
+    public ApiResponse<AttendanceResponseDto> updateAttendance(Long attendanceId, AttendanceUpdateDto dto) {
         Attendance attendance = attendanceRepository.findById(attendanceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with ID: " + attendanceId));
 
         Attendance updated = AttendanceMapper.toUpdatedEntity(attendance, dto);
-        return AttendanceMapper.toResponseDto(attendanceRepository.save(updated));
+        return new ApiResponse<>("success", "Attendance updated successfully", AttendanceMapper.toResponseDto(attendanceRepository.save(updated)));
     }
 
     @Override
-    public void deleteAttendance(Long attendanceId) {
+    public ApiResponse<AttendanceResponseDto> getAttendanceById(Long attendanceId) {
+        Attendance attendance = attendanceRepository.findById(attendanceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with ID: " + attendanceId));
+        return new ApiResponse<>("success", "Attendance fetched successfully", AttendanceMapper.toResponseDto(attendance));
+    }
+
+    @Override
+    public ApiResponse<List<AttendanceResponseDto>> getAllAttendances() {
+        List<AttendanceResponseDto> list = attendanceRepository.findAll()
+                .stream()
+                .map(AttendanceMapper::toResponseDto)
+                .collect(Collectors.toList());
+        return new ApiResponse<>("success", "All attendance records retrieved successfully", list);
+    }
+
+    @Override
+    public ApiResponse<Void> deleteAttendance(Long attendanceId) {
         if (!attendanceRepository.existsById(attendanceId)) {
             throw new ResourceNotFoundException("Attendance not found with ID: " + attendanceId);
         }
         attendanceRepository.deleteById(attendanceId);
-    }
-
-    @Override
-    public AttendanceResponseDto getAttendanceById(Long attendanceId) {
-        Attendance attendance = attendanceRepository.findById(attendanceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with ID: " + attendanceId));
-        return AttendanceMapper.toResponseDto(attendance);
-    }
-
-    @Override
-    public List<AttendanceResponseDto> getAllAttendances() {
-        return attendanceRepository.findAll()
-                .stream()
-                .map(AttendanceMapper::toResponseDto)
-                .collect(Collectors.toList());
+        return new ApiResponse<>("success", "Attendance deleted successfully", null);
     }
 }

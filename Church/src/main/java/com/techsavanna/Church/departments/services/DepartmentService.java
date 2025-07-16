@@ -1,13 +1,14 @@
 package com.techsavanna.Church.departments.services;
 
 import com.techsavanna.Church.departments.dtos.*;
+import com.techsavanna.Church.responses.ApiResponse;
 
 import java.util.List;
 
 public interface DepartmentService {
-    DepartmentResponseDto createDepartment(DepartmentCreateDto dto);
-    DepartmentResponseDto updateDepartment(Long departmentId, DepartmentUpdateDto dto);
-    void deleteDepartment(Long departmentId);
-    DepartmentResponseDto getDepartmentById(Long departmentId);
-    List<DepartmentResponseDto> getAllDepartments();
+    ApiResponse<DepartmentResponseDto> createDepartment(DepartmentCreateDto dto);
+    ApiResponse<DepartmentResponseDto> updateDepartment(Long departmentId, DepartmentUpdateDto dto);
+    ApiResponse<Void> deleteDepartment(Long departmentId);
+    ApiResponse<DepartmentResponseDto> getDepartmentById(Long departmentId);
+    ApiResponse<List<DepartmentResponseDto>> getAllDepartments();
 }
