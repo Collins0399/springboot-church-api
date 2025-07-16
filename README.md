@@ -89,7 +89,7 @@ spring:
     name: Church
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/churchdb
+    url: jdbc:postgresql://localhost:5432/ChurchTest_Db
     username: your_username
     password: your_password
     driver-class-name: org.postgresql.Driver
