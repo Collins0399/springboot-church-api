@@ -4,6 +4,8 @@ import com.techsavanna.Church.announcements.dtos.*;
 import com.techsavanna.Church.announcements.services.AnnouncementService;
 import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,12 +40,12 @@ public class AnnouncementController {
     }
 
     @GetMapping
-    public ApiResponse<List<AnnouncementResponseDto>> getAllAnnouncements() {
-        return service.getAllAnnouncements();
+    public ApiResponse<Page<AnnouncementResponseDto>> getAllAnnouncements(Pageable pageable) {
+        return service.getAllAnnouncements(pageable);
     }
 
     @GetMapping("/status/{status}")
-    public ApiResponse<List<AnnouncementResponseDto>> getByStatus(@PathVariable String status) {
-        return service.findByStatusIgnoreCase(status);
+    public ApiResponse<Page<AnnouncementResponseDto>> getByStatus(@PathVariable String status, Pageable pageable) {
+        return service.findByStatusIgnoreCase(status, pageable);
     }
 }

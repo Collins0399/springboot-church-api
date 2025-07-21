@@ -12,10 +12,9 @@ import com.techsavanna.Church.events.services.EventService;
 import com.techsavanna.Church.responses.ApiResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -53,6 +52,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
+    public ApiResponse<Void> deleteCompletedEvents() {
+        eventRepository.deleteCompletedEvents();
+        return new ApiResponse<>("success", "All completed events deleted successfully", null);
+    }
+
+
+    @Override
     public ApiResponse<EventResponseDto> getEventById(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + eventId));
@@ -60,27 +67,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ApiResponse<List<EventResponseDto>> getAllEvents() {
-        List<EventResponseDto> events = eventRepository.findAll()
-                .stream()
-                .map(EventMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "All events retrieved successfully", events);
+    public ApiResponse<Page<EventResponseDto>> getAllEvents(Pageable pageable) {
+        Page<Event> page = eventRepository.findAll(pageable);
+        Page<EventResponseDto> dtoPage = page.map(EventMapper::toResponseDto);
+        return new ApiResponse<>("success", "All events retrieved", dtoPage);
     }
 
-    @Override
-    @Transactional
-    public ApiResponse<Void> deleteCompletedEvents() {
-        eventRepository.deleteCompletedEvents();
-        return new ApiResponse<>("success", "All completed events deleted successfully", null);
-    }
 
     @Override
-    public ApiResponse<List<EventResponseDto>> getEventsByStatus(EventStatus status) {
-        List<Event> events = eventRepository.findByStatus(status);
-        List<EventResponseDto> dtos = events.stream()
-                .map(EventMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "Events with status " + status + " retrieved successfully", dtos);
+    public ApiResponse<Page<EventResponseDto>> getEventsByStatus(EventStatus status, Pageable pageable) {
+        Page<Event> page = eventRepository.findByStatus(status, pageable);
+        Page<EventResponseDto> dtoPage = page.map(EventMapper::toResponseDto);
+        return new ApiResponse<>("success", "Events filtered by status", dtoPage);
     }
+
 }

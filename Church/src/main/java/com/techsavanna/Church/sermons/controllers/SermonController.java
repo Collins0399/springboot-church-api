@@ -6,6 +6,8 @@ import com.techsavanna.Church.sermons.dtos.SermonResponseDto;
 import com.techsavanna.Church.sermons.dtos.SermonUpdateDto;
 import com.techsavanna.Church.sermons.services.SermonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +25,10 @@ public class SermonController {
     }
 
     @GetMapping
-    public ApiResponse<List<SermonResponseDto>> getAllSermons() {
-        return sermonService.getAllSermons();
+    public ApiResponse<Page<SermonResponseDto>> getAllSermons(Pageable pageable) {
+        return sermonService.getAllSermons(pageable);
     }
+
 
     @GetMapping("/{sermonId}")
     public ApiResponse<SermonResponseDto> getSermonById(@PathVariable Long sermonId) {

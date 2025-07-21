@@ -6,6 +6,8 @@ import com.techsavanna.Church.families.dtos.FamilyUpdateDto;
 import com.techsavanna.Church.families.services.FamilyService;
 import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +40,7 @@ public class FamilyController {
     }
 
     @GetMapping
-    public ApiResponse<List<FamilyResponseDto>> getAllFamilies() {
-        return familyService.getAllFamilies();
+    public ApiResponse<Page<FamilyResponseDto>> getAllFamilies(Pageable pageable) {
+        return familyService.getAllFamilies(pageable);
     }
 }

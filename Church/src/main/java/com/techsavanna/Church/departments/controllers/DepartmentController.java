@@ -4,6 +4,8 @@ import com.techsavanna.Church.departments.dtos.*;
 import com.techsavanna.Church.departments.services.DepartmentService;
 import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +42,7 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public ApiResponse<List<DepartmentResponseDto>> getAllDepartments() {
-        return departmentService.getAllDepartments();
+    public ApiResponse<Page<DepartmentResponseDto>> getAllDepartments(Pageable pageable) {
+        return departmentService.getAllDepartments(pageable);
     }
 }

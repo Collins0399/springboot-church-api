@@ -4,11 +4,16 @@ import com.techsavanna.Church.contributions.dtos.ContributionCreateDto;
 import com.techsavanna.Church.contributions.dtos.ContributionResponseDto;
 import com.techsavanna.Church.contributions.dtos.ContributionUpdateDto;
 import com.techsavanna.Church.contributions.services.ContributionService;
+import com.techsavanna.Church.enums.PaymentMethod;
+import com.techsavanna.Church.members.models.Member;
+import com.techsavanna.Church.members.repos.MemberRepository;
 import com.techsavanna.Church.responses.ApiResponse;
+import com.techsavanna.Church.handler.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/api/contributions")
@@ -16,6 +21,9 @@ public class ContributionController {
 
     @Autowired
     private ContributionService contributionService;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @PostMapping
     public ApiResponse<ContributionResponseDto> createContribution(@RequestBody ContributionCreateDto dto) {
@@ -38,7 +46,17 @@ public class ContributionController {
     }
 
     @GetMapping
-    public ApiResponse<List<ContributionResponseDto>> getAllContributions() {
-        return contributionService.getAllContributions();
+    public ApiResponse<Page<ContributionResponseDto>> getAllContributions(Pageable pageable) {
+        return contributionService.getAllContributions(pageable);
+    }
+
+    @GetMapping("/by-payment-method")
+    public ApiResponse<Page<ContributionResponseDto>> getByPaymentMethod(@RequestParam PaymentMethod method, Pageable pageable) {
+        return contributionService.getContributionsByPaymentMethod(method, pageable);
+    }
+
+    @GetMapping("/by-member-method")
+    public ApiResponse<Page<ContributionResponseDto>> getByMemberAndPaymentMethod(@RequestParam Long memberId, @RequestParam PaymentMethod method, Pageable pageable) {
+        return contributionService.getContributionsByMemberAndPaymentMethod(memberId, method, pageable);
     }
 }

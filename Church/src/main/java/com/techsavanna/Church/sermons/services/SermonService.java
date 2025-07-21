@@ -4,6 +4,8 @@ import com.techsavanna.Church.responses.ApiResponse;
 import com.techsavanna.Church.sermons.dtos.SermonCreateDto;
 import com.techsavanna.Church.sermons.dtos.SermonResponseDto;
 import com.techsavanna.Church.sermons.dtos.SermonUpdateDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,5 +14,5 @@ public interface SermonService {
     ApiResponse<SermonResponseDto> updateSermon(Long sermonId, SermonUpdateDto dto);
     ApiResponse<Void> deleteSermon(Long sermonId);
     ApiResponse<SermonResponseDto> getSermonById(Long sermonId);
-    ApiResponse<List<SermonResponseDto>> getAllSermons();
+    ApiResponse<Page<SermonResponseDto>> getAllSermons(Pageable pageable);
 }

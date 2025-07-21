@@ -10,6 +10,8 @@ import com.techsavanna.Church.members.models.Member;
 import com.techsavanna.Church.members.repos.MemberRepository;
 import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,11 +74,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public ApiResponse<List<DepartmentResponseDto>> getAllDepartments() {
-        List<Department> departments = departmentRepository.findAll();
-        List<DepartmentResponseDto> responseList = departments.stream()
-                .map(DepartmentMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return new ApiResponse<>("success", "All departments retrieved successfully", responseList);
+    public ApiResponse<Page<DepartmentResponseDto>> getAllDepartments(Pageable pageable) {
+        Page<DepartmentResponseDto> departments = departmentRepository.findAll(pageable)
+                .map(DepartmentMapper::toResponseDto);
+
+        return new ApiResponse<>("success", "All departments retrieved successfully", departments);
     }
+
 }

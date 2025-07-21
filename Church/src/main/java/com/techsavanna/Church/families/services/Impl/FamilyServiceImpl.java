@@ -11,6 +11,8 @@ import com.techsavanna.Church.families.services.FamilyService;
 import com.techsavanna.Church.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,12 +60,11 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public ApiResponse<List<FamilyResponseDto>> getAllFamilies() {
-        List<FamilyResponseDto> families = familyRepository.findAll()
-                .stream()
-                .map(FamilyMapper::toResponseDto)
-                .collect(Collectors.toList());
+    public ApiResponse<Page<FamilyResponseDto>> getAllFamilies(Pageable pageable) {
+        Page<FamilyResponseDto> families = familyRepository.findAll(pageable)
+                .map(FamilyMapper::toResponseDto);
 
         return new ApiResponse<>("success", "All families retrieved successfully", families);
     }
+
 }

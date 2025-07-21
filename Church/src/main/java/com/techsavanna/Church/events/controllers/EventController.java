@@ -8,6 +8,8 @@ import com.techsavanna.Church.events.services.EventService;
 import com.techsavanna.Church.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,18 +42,19 @@ public class EventController {
     }
 
     @GetMapping
-    public ApiResponse<List<EventResponseDto>> getAllEvents() {
-        return eventService.getAllEvents();
+    public ApiResponse<Page<EventResponseDto>> getAllEvents(Pageable pageable) {
+        return eventService.getAllEvents(pageable);
     }
+
 
     @DeleteMapping("/delete/completed")
     public ApiResponse<Void> deleteCompletedEvents() {
         return eventService.deleteCompletedEvents();
     }
 
-    @GetMapping("/status/{status}")
-    public ApiResponse<List<EventResponseDto>> getEventsByStatus(@PathVariable String status) {
-        EventStatus eventStatus = EventStatus.valueOf(status.toUpperCase());
-        return eventService.getEventsByStatus(eventStatus);
+    @GetMapping("/status")
+    public ApiResponse<Page<EventResponseDto>> getEventsByStatus(@RequestParam EventStatus status, Pageable pageable) {
+        return eventService.getEventsByStatus(status, pageable);
     }
+
 }

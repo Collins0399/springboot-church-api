@@ -12,6 +12,8 @@ import com.techsavanna.Church.sermons.models.Sermon;
 import com.techsavanna.Church.sermons.repos.SermonRepository;
 import com.techsavanna.Church.sermons.services.SermonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,11 +71,11 @@ public class SermonServiceImpl implements SermonService {
     }
 
     @Override
-    public ApiResponse<List<SermonResponseDto>> getAllSermons() {
-        List<SermonResponseDto> sermons = sermonRepository.findAll()
-                .stream()
-                .map(SermonMapper::toResponseDto)
-                .collect(Collectors.toList());
+    public ApiResponse<Page<SermonResponseDto>> getAllSermons(Pageable pageable) {
+        Page<SermonResponseDto> sermons = sermonRepository.findAll(pageable)
+                .map(SermonMapper::toResponseDto);
+
         return new ApiResponse<>("success", "All sermons retrieved successfully", sermons);
     }
+
 }

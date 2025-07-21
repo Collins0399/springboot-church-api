@@ -7,9 +7,13 @@ import com.techsavanna.Church.announcements.repos.AnnouncementRepository;
 import com.techsavanna.Church.announcements.services.AnnouncementService;
 import com.techsavanna.Church.enums.AnnouncementStatus;
 import com.techsavanna.Church.handler.ResourceNotFoundException;
+import com.techsavanna.Church.members.dtos.MemberResponseDto;
+import com.techsavanna.Church.members.mappers.MemberMapper;
 import com.techsavanna.Church.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,22 +65,17 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public ApiResponse<List<AnnouncementResponseDto>> getAllAnnouncements() {
-        List<AnnouncementResponseDto> list = repository.findAll()
-                .stream()
-                .map(AnnouncementMapper::toResponseDto)
-                .collect(Collectors.toList());
-
-        return new ApiResponse<>("success", "All announcements retrieved", list);
+    public ApiResponse<Page<AnnouncementResponseDto>> getAllAnnouncements(Pageable pageable) {
+        Page<Announcement> page = repository.findAll(pageable);
+        Page<AnnouncementResponseDto> dtoPage = page.map(AnnouncementMapper::toResponseDto);
+        return new ApiResponse<>("success", "All announcements retrieved", dtoPage);
     }
 
     @Override
-    public ApiResponse<List<AnnouncementResponseDto>> findByStatusIgnoreCase(String status) {
-        List<Announcement> announcements = repository.findByStatusIgnoreCase(status);
-        List<AnnouncementResponseDto> result = announcements.stream()
-                .map(AnnouncementMapper::toResponseDto)
-                .collect(Collectors.toList());
-
-        return new ApiResponse<>("success", "Announcements filtered by status", result);
+    public ApiResponse<Page<AnnouncementResponseDto>> findByStatusIgnoreCase(String status, Pageable pageable) {
+        Page<Announcement> page = repository.findByStatusIgnoreCase(status, pageable);
+        Page<AnnouncementResponseDto> dtoPage = page.map(AnnouncementMapper::toResponseDto);
+        return new ApiResponse<>("success", "Announcements filtered by status", dtoPage);
     }
+
 }
