@@ -21,7 +21,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t collinskiprotich780/church-app:latest .
+        docker build -t collinskiprotich780/church-app:latest ./Church
 
     - name: Push Docker image to Docker Hub
       run: |
