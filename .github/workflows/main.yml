@@ -70,12 +70,6 @@ jobs:
             -p 8080:8080 \
             ${{ secrets.DOCKER_USERNAME }}/church-app:latest
 
-          echo "Waiting for the application to initialize..."
-          sleep 20
-
-          echo "Verifying if church-app container is running..."
-          docker ps | grep test-church-app
-
       - name: Stop and Clean Containers
         run: |
           docker rm -f test-church-app
