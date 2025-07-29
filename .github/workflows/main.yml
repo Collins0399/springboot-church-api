@@ -8,6 +8,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: ChurchTest_Db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 0399
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,6 +40,38 @@ jobs:
 
       - name: Build Docker image using Docker Compose
         run: docker compose -f Church/docker-compose.yml build
+
+     - name: Run Church App Container
+        run: |
+          docker network create church-net
+          
+          docker run -d \
+            --name postgres \
+            --network church-net \
+            -e POSTGRES_DB=ChurchTest_Db \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=0399 \
+            postgres:15
+
+          docker run -d \
+            --name test-church-app \
+            --network church-net \
+            -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/ChurchTest_Db \
+            -e SPRING_DATASOURCE_USERNAME=postgres \
+            -e SPRING_DATASOURCE_PASSWORD=0399 \
+            -p 8080:8080 \
+            ${{ secrets.DOCKER_USERNAME }}/church-app:latest
+
+          echo " Waiting for app to initialize..."
+          sleep 20
+
+          docker ps
+          
+       - name: Stop and Clean Containers
+        run: |
+          docker rm -f test-church-app
+          docker rm -f postgres
+          docker network rm church-net
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/church-app:latest ./Church
