@@ -32,4 +32,5 @@ jobs:
         run: docker compose -f Church/docker-compose.yml build
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/church-app:latest
+        run: docker push collinskiprotich780/church-app:latest
+
