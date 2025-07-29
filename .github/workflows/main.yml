@@ -29,10 +29,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image using Docker Compose
-        run: docker compose -f docker-compose.yml build
-
-      - name: Tag Docker image
-        run: docker tag church-app ${{ secrets.DOCKER_USERNAME }}/church-app:latest
+        run: docker compose -f Church/docker-compose.yml build
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/church-app:latest
