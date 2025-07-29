@@ -6,10 +6,19 @@ spring:
     name: Church
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/ChurchTest_Db
+    url: jdbc:postgresql://db:5432/ChurchTest_Db
     username: postgres
     password: 0399
     driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    continue-on-error: true
+
+  sql:
+    init:
+      mode: always
+      platform: postgres
+      data-locations: classpath:data.sql
+      schema-locations: classpath:schema.sql
 
   jpa:
     hibernate:

@@ -1,0 +1,38 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: church-container
+    depends_on:
+      - db
+    ports:
+      - "8080:9001"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ChurchTest_Db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 0399
+    networks:
+      - church-network
+
+  db:
+    image: postgres:15
+    container_name: church-db
+    restart: always
+    environment:
+      POSTGRES_DB: ChurchTest_Db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0399
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - church-network
+
+volumes:
+  pgdata:
+
+networks:
+  church-network:

@@ -1,5 +1,6 @@
 package com.techsavanna.Church.members.repos;
 
+import com.techsavanna.Church.members.dtos.MemberResponseDto;
 import com.techsavanna.Church.members.enums.BaptismStatus;
 import com.techsavanna.Church.members.models.Member;
 import org.springframework.data.domain.Page;

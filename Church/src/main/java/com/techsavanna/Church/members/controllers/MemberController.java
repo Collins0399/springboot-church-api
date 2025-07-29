@@ -7,6 +7,7 @@ import com.techsavanna.Church.members.enums.BaptismStatus;
 import com.techsavanna.Church.members.services.MemberService;
 import com.techsavanna.Church.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
@@ -50,10 +51,11 @@ public class MemberController {
     }
 
     @GetMapping
-    public ApiResponse<Page<MemberResponseDto>> getAllMembers(
-            @PageableDefault(size = 10, sort = "firstName") Pageable pageable) {
+    public ApiResponse<Page<MemberResponseDto>> getAllMembers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
         return memberService.getAllMembers(pageable);
     }
+
 
     @GetMapping("/search-by-name")
     public ApiResponse<Page<MemberResponseDto>> searchByFirstName(@RequestParam String namePart, Pageable pageable) {

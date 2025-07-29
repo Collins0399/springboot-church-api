@@ -1,0 +1,2 @@
+INSERT INTO member (member_id, family_id, department_id, first_name, last_name, gender, date_of_birth, marital_status, email, phone_number, address, country, city, postal_code, baptism_status, baptism_date, joined_date, occupation, role_in_church, profile_picture_path)
+VALUES (1, 101, 201, 'John', 'Doe', 'MALE', '1990-01-01', 'Single', 'john.doe@example.com', '0700123456', '123 Street', 'Kenya', 'Nairobi', '00100', 'BAPTISED', '2010-06-15', '2020-01-01', 'Engineer', 'Usher', 'default.jpg');
