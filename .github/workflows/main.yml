@@ -31,6 +31,7 @@ jobs:
       - name: Build Docker image using Docker Compose
         run: docker compose -f Church/docker-compose.yml build
 
-      - name: Push Docker image
-        run: docker push collinskiprotich780/church-app:latest
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/church-app:latest ./Church
+
 
